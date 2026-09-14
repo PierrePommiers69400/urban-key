@@ -8,11 +8,12 @@ import Magnetic from "./ui/Magnetic";
 import "./contact.css";
 
 /**
- * Site statique : aucun serveur n'est appelé.
- * Renseignez une URL (Formspree, Netlify Forms, Basin…) pour recevoir les demandes ;
- * sans endpoint, le formulaire bascule sur un envoi par courriel.
+ * Site statique : les demandes passent par FormSubmit (gratuit, sans compte),
+ * qui les réexpédie par courriel à l'adresse de la marque. Au tout premier
+ * envoi, FormSubmit écrit à cette adresse pour faire activer le formulaire.
+ * Passer la constante à `null` rebascule sur un simple lien `mailto:`.
  */
-const FORM_ENDPOINT = null;
+const FORM_ENDPOINT = `https://formsubmit.co/ajax/${brand.email}`;
 
 const fields = [
   { name: "nom", label: "Nom & prénom", type: "text", autoComplete: "name", required: true },
@@ -29,15 +30,28 @@ export default function Contact() {
     const form = e.currentTarget;
     if (!form.reportValidity()) return;
     setStatus("sending");
-    const data = Object.fromEntries(new FormData(form).entries());
+    const { _honey, ...data } = Object.fromEntries(new FormData(form).entries());
+
+    // Champ invisible : seul un robot le remplit. On le laisse croire que c'est parti.
+    if (_honey) {
+      setStatus("done");
+      return;
+    }
 
     try {
       if (FORM_ENDPOINT) {
-        await fetch(FORM_ENDPOINT, {
+        const res = await fetch(FORM_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            ...data,
+            _subject: `Demande d'estimation — ${data.nom || "site Urban Key"}`,
+            _template: "table",
+            _captcha: "false",
+          }),
         });
+        const reply = await res.json().catch(() => ({}));
+        if (!res.ok || String(reply.success) === "false") throw new Error(reply.message);
       } else {
         const body = Object.entries(data)
           .map(([k, v]) => `${k} : ${v}`)
@@ -50,7 +64,7 @@ export default function Contact() {
       setStatus("done");
       form.reset();
     } catch {
-      setStatus("idle");
+      setStatus("error");
     }
   };
 
@@ -143,7 +157,6 @@ export default function Contact() {
                         autoComplete={f.autoComplete}
                         required={f.required}
                         placeholder=" "
-                        data-cursor="text"
                       />
                       <label htmlFor={f.name}>
                         {f.label}
@@ -159,11 +172,20 @@ export default function Contact() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.49, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <textarea id="message" name="message" rows={4} placeholder=" " data-cursor="text" />
+                    <textarea id="message" name="message" rows={4} placeholder=" " />
                     <label htmlFor="message">Votre projet</label>
                     <span className="field__line" />
                   </motion.div>
                 </div>
+
+                <input
+                  className="contact__honey"
+                  type="text"
+                  name="_honey"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                />
 
                 <div className="contact__submit">
                   <Magnetic strength={0.24}>
@@ -176,6 +198,14 @@ export default function Contact() {
                     Vos informations restent confidentielles et ne servent qu'à l'étude de votre bien.
                   </p>
                 </div>
+
+                {status === "error" && (
+                  <p className="contact__error" role="alert">
+                    L'envoi n'a pas abouti. Réessayez dans un instant, ou joignez-nous directement :{" "}
+                    <a className="link-underline" href={brand.phoneHref}>{brand.phone}</a> ·{" "}
+                    <a className="link-underline" href={`mailto:${brand.email}`}>{brand.email}</a>
+                  </p>
+                )}
               </motion.form>
             )}
           </AnimatePresence>

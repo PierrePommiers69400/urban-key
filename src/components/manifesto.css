@@ -206,3 +206,15 @@
   .manifesto__badge { display: none; }
   .manifesto__inset { width: 38%; right: -6%; top: 58%; }
 }
+
+@media (max-width: 720px) {
+  .manifesto__grid { gap: 2.6rem; }
+  .manifesto__head { gap: 1rem; }
+  .manifesto__principles { margin-top: 0.2rem; }
+  .manifesto__principle { gap: 0.9rem; padding-block: 0.85rem; }
+  .manifesto__principle h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .manifesto__principle p { font-size: var(--fs-small); line-height: 1.6; }
+  .manifesto__signature { margin-top: 0; }
+  .manifesto__aside { width: 80%; gap: 1.6rem; padding-top: 0.8rem; }
+  .manifesto__quote p { font-size: 1.15rem; }
+}

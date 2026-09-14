@@ -137,5 +137,6 @@
 }
 
 @media (max-width: 620px) {
-  .hero__highlights { gap: 1.1rem 1.8rem; }
+  .hero { padding-block: calc(var(--nav-h) + 2.2rem) 2.6rem; }
+  .hero__highlights { gap: 1.1rem 1.8rem; margin-top: 0.4rem; padding-top: 1.1rem; }
 }

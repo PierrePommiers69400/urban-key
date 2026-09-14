@@ -42,8 +42,6 @@ function Shot({ photo, i, drift, onOpen }) {
         type="button"
         className="shot__frame"
         onClick={() => onOpen(i)}
-        data-cursor="view"
-        data-cursor-label="Agrandir"
       >
         <span className="sr-only">Agrandir : </span>
         <motion.img
@@ -190,7 +188,7 @@ export default function Gallery() {
               <em className="accent-text">bientôt ici&nbsp;?</em>
             </p>
             <Magnetic strength={0.28}>
-              <a className="btn" href="#contact" data-cursor="link">
+              <a className="btn" href="#contact">
                 Estimer mes revenus
                 <span className="btn__arrow">→</span>
               </a>

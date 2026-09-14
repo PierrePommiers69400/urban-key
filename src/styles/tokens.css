@@ -150,6 +150,8 @@
 
 @media (max-width: 720px) {
   :root {
+    /* Au téléphone, l'air entre les sections se compte en pouces, pas en écrans. */
+    --section-y: 3.6rem;
     --nav-h: 68px;
     --track-label: 0.14em;
     --track-wide: 0.08em;

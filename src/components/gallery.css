@@ -125,6 +125,7 @@
   overflow: hidden;
   isolation: isolate;
   background: var(--navy-700);
+  cursor: zoom-in;
 }
 
 .shot--arch .shot__frame { border-radius: 999px 999px 0 0; }
@@ -340,4 +341,14 @@
 
 @media (max-width: 560px) {
   .gallery__room { min-width: 0; }
+}
+
+@media (max-width: 720px) {
+  .shot--arch { --mh: min(100vw, 400px); }
+  .shot--tall { --mh: min(86vw, 340px); }
+  .shot--wide { --mh: min(56vw, 240px); }
+  .gallery:not(.is-pinned) .gallery__intro { padding-bottom: 1.6rem; }
+  .gallery:not(.is-pinned) .gallery__outro { margin-top: 2.4rem; gap: 1.2rem; }
+  .gallery__lead { font-size: var(--fs-small); }
+  .gallery__outro-text { font-size: 2rem; }
 }

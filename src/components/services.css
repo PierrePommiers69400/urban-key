@@ -181,8 +181,115 @@
   .services__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+/* Sur grand écran, le repli n'existe pas : ces enveloppes s'effacent. */
+.service__hit,
+.service__plus { display: none; }
+.service__more,
+.service__more-inner { display: contents; }
+
 @media (max-width: 680px) {
-  .services__grid { grid-template-columns: 1fr; }
-  .service { min-height: 0; }
-  .service__details { max-height: 200px; opacity: 1; transform: none; margin-top: 0.5rem; }
+  /* Six lignes repliables plutôt que six cartes empilées. */
+  .services__grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    background: none;
+    border: 0;
+    border-top: var(--rule);
+  }
+
+  .service {
+    grid-template-columns: 2.4rem 1.9rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0 0.7rem;
+    min-height: 0;
+    padding: 1.05rem 0;
+    background: transparent;
+    border-bottom: var(--rule);
+  }
+
+  .service::before,
+  .service__spot,
+  .service__corner { display: none; }
+
+  .service__hit {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .service__index { padding-top: 0.15em; }
+  .service__icon { margin: 0; width: 1.9rem; }
+  .service__icon svg { width: 100%; height: auto; }
+  .service__title { font-size: 1.16rem; line-height: 1.25; }
+
+  .service__plus {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: var(--rule-strong);
+    border-radius: 50%;
+    transition: background 0.5s var(--ease-out), border-color 0.5s var(--ease-out);
+  }
+
+  .service__plus span {
+    position: absolute;
+    width: 10px;
+    height: 1px;
+    background: var(--accent);
+    transition: transform 0.5s var(--ease-out), background 0.5s var(--ease-out);
+  }
+
+  .service__plus span:last-child { transform: rotate(90deg); }
+  .service.is-open .service__plus { background: var(--accent); border-color: transparent; }
+  .service.is-open .service__plus span { background: var(--paper); }
+  .service.is-open .service__plus span:last-child { transform: rotate(0deg); }
+
+  /* Dépliage fluide : la rangée passe de 0fr à 1fr. */
+  .service__more {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.55s var(--ease-out);
+  }
+
+  .service.is-open .service__more { grid-template-rows: 1fr; }
+
+  .service__more-inner {
+    display: grid;
+    gap: 0.7rem;
+    min-height: 0;
+    overflow: hidden;
+    padding-left: calc(2.4rem + 0.7rem);
+  }
+
+  .service__summary { padding-top: 0.8rem; font-size: var(--fs-small); }
+
+  .service__details,
+  .service:hover .service__details {
+    max-height: none;
+    opacity: 1;
+    transform: none;
+    margin-top: 0;
+    padding-bottom: 0.3rem;
+  }
+
+  /* Le survol n'a pas de sens au doigt : aucune inversion bleu nuit. */
+  .service:hover .service__title { color: var(--fg); }
+  .service:hover .service__summary { color: var(--fg-dim); }
+  .service:hover .service__index,
+  .service:hover .service__icon,
+  .service:hover .service__details li { color: var(--accent); }
+  .service:hover .service__bullet { border-color: var(--accent); }
+  .service:hover .service__icon { transform: none; }
+}
+
+@media (max-width: 680px) {
+  .services__head { gap: 1rem; padding-bottom: 1.6rem; }
+  .services__title { margin-top: 0.9rem; }
+  .services__note p { font-size: var(--fs-small); }
+  .services__note-link { margin-top: 0.7rem; }
 }

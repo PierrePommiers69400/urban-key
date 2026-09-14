@@ -85,7 +85,7 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <Magnetic strength={0.28}>
-              <a className="btn" href="#contact" data-cursor="link">
+              <a className="btn" href="#contact">
                 Estimer mes revenus
                 <span className="btn__arrow">→</span>
               </a>
@@ -94,7 +94,6 @@ export default function Hero() {
               <a
                 className="btn btn--ghost"
                 href="#manifeste"
-                data-cursor="link"
               >
                 Découvrir la maison
               </a>

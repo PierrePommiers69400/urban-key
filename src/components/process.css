@@ -21,7 +21,9 @@
 .process__lead { max-width: 34ch; }
 .process__cta { margin-top: 0.6rem; }
 
-.process__timeline { position: relative; padding-left: clamp(1.6rem, 3vw, 2.8rem); }
+/* Les étapes arrivent en glissant de la droite : sans découpe, elles
+   dépasseraient de l'écran au téléphone tant qu'on ne les a pas atteintes. */
+.process__timeline { position: relative; padding-left: clamp(1.6rem, 3vw, 2.8rem); overflow-x: clip; }
 
 .process__rail {
   position: absolute;
@@ -112,4 +114,17 @@
 @media (max-width: 1024px) {
   .process__grid { grid-template-columns: 1fr; }
   .process__sticky { position: static; }
+}
+
+@media (max-width: 720px) {
+  .process__grid { gap: 2.2rem; }
+  .process__sticky { gap: 0.9rem; }
+  .process__cta { display: none; }
+  .process__steps { gap: 1.7rem; }
+  .step { gap: 0.9rem; }
+  .step__ordinal { display: none; }
+  .step__index { font-size: 1.25rem; }
+  .step__body h3 { font-size: 1.3rem; margin-bottom: 0.35rem; }
+  .step__body p { font-size: var(--fs-small); }
+  .step__aside { margin-top: 0.6rem; padding: 0.4em 0.9em; }
 }

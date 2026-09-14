@@ -60,7 +60,7 @@ const documents = {
       },
       {
         heading: "Qui y a accès",
-        text: `Les seules personnes de ${brand.legalName} qui traitent votre demande. Vos données ne sont ni vendues, ni cédées, ni utilisées à des fins publicitaires.`,
+        text: `Les seules personnes de ${brand.legalName} qui traitent votre demande. Le formulaire transite par le service FormSubmit (formsubmit.co), chargé de nous le transmettre par courriel. Vos données ne sont ni vendues, ni cédées, ni utilisées à des fins publicitaires.`,
       },
       {
         heading: "Cookies",

@@ -142,8 +142,57 @@
 
 .plan__cta { justify-self: start; margin-top: 0.4rem; }
 
+.pricing__swipe { display: none; }
+
 @media (max-width: 1024px) {
   .pricing__head { grid-template-columns: 1fr; align-items: start; }
-  .pricing__grid { grid-template-columns: 1fr; }
   .plan__flag { right: auto; left: clamp(1.4rem, 3vw, 2.4rem); }
+
+  /* Trois paliers côte à côte, à parcourir du doigt, plutôt qu'empilés. */
+  .pricing__grid {
+    display: flex;
+    gap: 0.9rem;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 1.3rem var(--gutter) 1.6rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .pricing__grid::-webkit-scrollbar { display: none; }
+
+  .plan {
+    flex: 0 0 min(84%, 23rem);
+    scroll-snap-align: start;
+  }
+
+  .plan:hover { transform: none; }
+
+  .pricing__swipe {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--fs-label);
+    letter-spacing: var(--track-wide);
+    text-transform: uppercase;
+    color: var(--fg-faint);
+  }
+
+  .pricing__swipe span { color: var(--accent); animation: swipe-nudge 2.4s var(--ease-in-out) infinite; }
+}
+
+@keyframes swipe-nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+
+@media (max-width: 720px) {
+  .pricing__head { gap: 1rem; padding-bottom: 0.6rem; }
+  .pricing__title { margin-top: 0.9rem; }
+  .pricing__note p { font-size: var(--fs-small); }
+  .plan { padding: 1.5rem 1.35rem; gap: 1rem; }
+  .plan__rate { padding-block: 0.7rem; }
+  .plan__features { gap: 0.5rem; }
 }

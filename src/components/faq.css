@@ -94,3 +94,14 @@
   .faq__grid { grid-template-columns: 1fr; }
   .faq__aside { position: static; }
 }
+
+@media (max-width: 720px) {
+  .faq__grid { gap: 1.8rem; }
+  .faq__aside { gap: 0.9rem; }
+  .faq__aside .btn { display: none; }
+  .faq__lead { font-size: var(--fs-small); }
+  .faq__question { gap: 0.8rem; padding-block: 0.95rem; }
+  .faq__q-text { font-size: 1.05rem; }
+  .faq__toggle { width: 30px; height: 30px; }
+  .faq__answer p { padding: 0 0 1.1rem; font-size: var(--fs-small); }
+}

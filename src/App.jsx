@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Cursor from "./components/Cursor";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Marquee from "./components/Marquee";
@@ -30,7 +29,6 @@ export default function App() {
 
   return (
     <>
-      <Cursor />
       <Nav />
 
       <main>

@@ -175,28 +175,33 @@ signé avec le propriétaire qui fait foi.
 
 ## Formulaire de contact
 
-`src/components/Contact.jsx` expose une constante `FORM_ENDPOINT` :
+Les demandes arrivent par courriel dans la boîte de la marque (`brand.email`),
+via **FormSubmit** — gratuit, sans compte (`FORM_ENDPOINT` dans
+`src/components/Contact.jsx`).
 
-- **`null` (par défaut)** — le formulaire prépare un courriel dans la messagerie
-  du visiteur (`mailto:`) et le message de confirmation l'indique clairement.
-- **URL renseignée** — les champs sont envoyés en JSON par `POST` à ce point
-  d'entrée (Formspree, Netlify Forms, Basin, Formcarry…). Le message de
-  confirmation devient alors « Votre demande est partie ».
+- **Activation** : au tout premier envoi, FormSubmit écrit à cette adresse un
+  message « Activate Form ». Il faut cliquer sur le lien une fois ; tant que ce
+  n'est pas fait, le formulaire affiche une erreur avec le téléphone et
+  l'adresse de contact.
+- **Anti-spam** : un champ invisible (`_honey`) écarte les robots.
+- **Changer d'adresse** : modifier `brand.email` dans `content.js`, puis
+  refaire l'activation.
+- `FORM_ENDPOINT = null` rebascule sur un lien `mailto:` qui ouvre la
+  messagerie du visiteur.
 
 ## Motion
 
 Animations pilotées par [`motion`](https://motion.dev) (successeur de
 Framer Motion) :
 
-- curseur magnétique qui s'inverse en franchissant un bloc bleu ;
 - titres révélés mot à mot depuis un masque — **sauf celui du premier écran**,
   qui est peint dès la première image : c'est la phrase qu'on doit lire en
   arrivant, elle n'attend rien ;
 - parallaxe de section, bandeau réactif à la vitesse de défilement,
   frise verticale progressive, compteurs, carrousel, accordéon.
 
-`prefers-reduced-motion` est respecté partout : le curseur est désactivé et
-les révélations deviennent de simples fondus.
+`prefers-reduced-motion` est respecté partout : les révélations deviennent de
+simples fondus et la galerie cesse de s'épingler.
 
 Le déclencheur d'apparition (`src/components/ui/useRevealed.js`) double
 l'`IntersectionObserver` d'une vérification géométrique au montage, pour que les
@@ -211,7 +216,7 @@ src/
   styles/                 jetons de design et styles de base
   components/
     <Section>.jsx + .css  une section = un composant + sa feuille de style
-    ui/                   primitives (révélation, titres, clé SVG, curseur…)
+    ui/                   primitives (révélation, titres, clé, visionneuse…)
 public/
   brand/                  favicon et image de partage
   interieurs/             photos des logements (WebP, 600 et 1000 px)

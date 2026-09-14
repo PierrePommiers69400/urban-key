@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion } from "motion/react";
 import useRevealed from "./ui/useRevealed";
 import { services } from "../data/content";
@@ -7,7 +7,7 @@ import Reveal from "./ui/Reveal";
 import Icon from "./ui/Icons";
 import "./services.css";
 
-function ServiceCard({ service, index }) {
+function ServiceCard({ service, index, open, onToggle }) {
   const ref = useRef(null);
   const revealed = useRevealed(ref, 0.2);
 
@@ -22,28 +22,44 @@ function ServiceCard({ service, index }) {
   return (
     <motion.article
       ref={ref}
-      className="service"
+      className={`service ${open ? "is-open" : ""}`}
       onMouseMove={onMove}
       initial={{ opacity: 0, y: 46 }}
       animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 46 }}
       transition={{ duration: 1, delay: (index % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      data-cursor="link"
     >
       <div className="service__spot" />
+      {/* Au téléphone, la carte se replie en ligne : ce bouton la déplie. */}
+      <button
+        type="button"
+        className="service__hit"
+        onClick={onToggle}
+        aria-expanded={open}
+        aria-controls={`service-${service.id}`}
+        aria-label={service.title}
+      />
       <span className="service__index">{service.index}</span>
       <div className="service__icon">
         <Icon name={service.icon} size={44} />
       </div>
       <h3 className="service__title">{service.title}</h3>
-      <p className="service__summary">{service.summary}</p>
-      <ul className="service__details">
-        {service.details.map((d) => (
-          <li key={d}>
-            <span className="service__bullet" />
-            {d}
-          </li>
-        ))}
-      </ul>
+      <span className="service__plus" aria-hidden="true">
+        <span />
+        <span />
+      </span>
+      <div className="service__more" id={`service-${service.id}`}>
+        <div className="service__more-inner">
+          <p className="service__summary">{service.summary}</p>
+          <ul className="service__details">
+            {service.details.map((d) => (
+              <li key={d}>
+                <span className="service__bullet" />
+                {d}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
       <span className="service__corner service__corner--tl" />
       <span className="service__corner service__corner--br" />
     </motion.article>
@@ -51,6 +67,8 @@ function ServiceCard({ service, index }) {
 }
 
 export default function Services() {
+  const [open, setOpen] = useState(-1);
+
   return (
     <section className="section services" id="services">
       <div className="shell">
@@ -78,7 +96,13 @@ export default function Services() {
 
         <div className="services__grid">
           {services.map((s, i) => (
-            <ServiceCard key={s.id} service={s} index={i} />
+            <ServiceCard
+              key={s.id}
+              service={s}
+              index={i}
+              open={open === i}
+              onToggle={() => setOpen(open === i ? -1 : i)}
+            />
           ))}
         </div>
       </div>

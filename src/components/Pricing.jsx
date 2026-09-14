@@ -83,6 +83,9 @@ export default function Pricing() {
             <Plan key={plan.id} plan={plan} i={i} />
           ))}
         </div>
+        <p className="pricing__swipe" aria-hidden="true">
+          Glissez pour comparer <span>→</span>
+        </p>
       </div>
     </section>
   );
