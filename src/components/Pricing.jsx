@@ -15,7 +15,6 @@ function Plan({ plan, i }) {
       className={`plan reveal ${revealed ? "is-in" : ""} ${plan.featured ? "plan--featured on-navy" : ""}`}
       style={{ "--reveal-y": "54px", "--reveal-delay": `${i * 0.12}s` }}
     >
-      {plan.featured && <span className="plan__flag">La plus choisie</span>}
       <header className="plan__head">
         <h3 className="plan__name">{plan.name}</h3>
         <p className="plan__pitch">{plan.pitch}</p>
