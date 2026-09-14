@@ -163,16 +163,17 @@ export const processSteps = [
 ];
 
 /**
- * Barème dégressif à trois paliers de chiffre d'affaires.
- * À CONFIRMER : les seuils de chaque tranche ne sont pas encore fixés ici.
+ * Barème à trois paliers, selon ce que le logement rapporte dans le mois.
+ * Le taux du palier atteint s'applique à l'ensemble des revenus du mois :
+ * un mois à 1 000 € relève du deuxième palier, 18 % sur les 1 000 €.
  */
 export const plans = [
   {
     id: "palier-1",
     name: "Premier palier",
-    rate: "23 %",
-    rateNote: "sur la première tranche de revenus",
-    pitch: "Le taux d'entrée, le temps que le logement trouve son rythme.",
+    rate: "14 %",
+    rateNote: "de 0 à 600 € de revenus par mois",
+    pitch: "Le taux le plus léger, pour un logement qui démarre ou loue peu.",
     features: [
       "Annonce optimisée & diffusion",
       "Entrées et sorties autonomes",
@@ -184,9 +185,9 @@ export const plans = [
   {
     id: "palier-2",
     name: "Deuxième palier",
-    rate: "18 %",
-    rateNote: "sur la tranche intermédiaire",
-    pitch: "Dès que les revenus montent, le taux descend.",
+    rate: "18 %",
+    rateNote: "de 600 à 1 300 € de revenus par mois",
+    pitch: "Le palier des logements qui tournent régulièrement.",
     features: [
       "Tout le premier palier",
       "Tarification dynamique quotidienne",
@@ -198,9 +199,9 @@ export const plans = [
   {
     id: "palier-3",
     name: "Troisième palier",
-    rate: "14 %",
-    rateNote: "sur la tranche haute",
-    pitch: "Le taux le plus bas, sur la part de revenus la plus élevée.",
+    rate: "23 %",
+    rateNote: "à partir de 1 300 € de revenus par mois",
+    pitch: "Pour les logements très demandés, suivis au plus près.",
     features: [
       "Tout le deuxième palier",
       "Arbitrage des durées de séjour",
@@ -312,7 +313,7 @@ export const faq = [
   },
   {
     q: "Combien cela va-t-il me coûter ?",
-    a: "Une commission prélevée sur les revenus perçus, selon un barème à trois paliers — 23 %, 18 % puis 14 % — qui baisse à mesure que le chiffre d'affaires du logement augmente. S'y ajoutent des frais de mise en service à l'entrée, qui couvrent l'inventaire, l'équipement d'accès autonome et la préparation du logement. Aucun abonnement mensuel.",
+    a: "Une commission prélevée sur les revenus perçus, dont le taux dépend de ce que le logement rapporte dans le mois : 14 % de 0 à 600 €, 18 % de 600 à 1 300 €, 23 % à partir de 1 300 €. Le taux s'applique à l'ensemble des revenus du mois — un mois à 1 000 €, par exemple, est facturé 18 %, soit 180 €. S'y ajoutent des frais de mise en service à l'entrée, qui couvrent l'inventaire, l'équipement d'accès autonome et la préparation du logement. Aucun abonnement mensuel.",
   },
   {
     q: "Vous occupez-vous vraiment de tout ?",

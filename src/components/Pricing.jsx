@@ -57,15 +57,16 @@ export default function Pricing() {
             <SplitText
               as="h2"
               className="pricing__title"
-              lines={[["Un", "barème"], [{ text: "dégressif,", gold: true, italic: true }], ["tout", "est", "annoncé."]]}
+              lines={[["Un", "barème"], [{ text: "clair,", gold: true, italic: true }], ["tout", "est", "annoncé."]]}
             />
           </div>
           <Reveal delay={0.15} className="pricing__note">
             <p>
-              Le barème s'applique par tranche de chiffre d'affaires : plus votre logement
-              produit, plus le taux descend. À l'entrée, des frais de mise en service couvrent
-              l'inventaire, l'équipement d'accès autonome et la préparation du bien. Mandat
-              d'un an, le temps qu'une saison complète s'installe.
+              Le taux dépend de ce que votre logement rapporte dans le mois, et s'applique à
+              l'ensemble de ces revenus : un mois à 1&nbsp;000&nbsp;€ relève du deuxième palier, soit
+              18&nbsp;%, 180&nbsp;€. À l'entrée, des frais de mise en service couvrent l'inventaire,
+              l'équipement d'accès autonome et la préparation du bien. Mandat d'un an, le
+              temps qu'une saison complète s'installe.
             </p>
           </Reveal>
         </header>
