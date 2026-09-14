@@ -1,0 +1,343 @@
+/* ============================================================
+   Nos intérieurs — sur grand écran, la section s'épingle et les
+   photos défilent à l'horizontale au rythme de la molette.
+   ============================================================ */
+
+.gallery {
+  position: relative;
+  background:
+    radial-gradient(70% 60% at 72% 42%, rgba(34, 64, 111, 0.55), transparent 72%),
+    radial-gradient(50% 50% at 8% 100%, rgba(195, 154, 98, 0.1), transparent 70%),
+    var(--navy-900);
+}
+
+.gallery__pin {
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery__ghost {
+  position: absolute;
+  left: 22vw;
+  top: 50%;
+  translate: 0 -50%;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(8rem, 30vw, 32rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: rgba(226, 192, 145, 0.045);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ————— Texte d'ouverture et de fin ————— */
+
+.gallery__intro {
+  position: relative;
+  display: grid;
+  gap: clamp(1rem, 2.2vh, 1.5rem);
+  justify-items: start;
+}
+
+.gallery__title {
+  font-size: clamp(2.6rem, 4.9vw, 5.1rem);
+  letter-spacing: -0.028em;
+  color: var(--fg);
+}
+
+.gallery__lead {
+  max-width: 38ch;
+  color: var(--fg-dim);
+}
+
+.gallery__hint {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.gallery__hint-line {
+  position: relative;
+  width: 70px;
+  height: 1px;
+  overflow: hidden;
+  background: var(--line-strong);
+}
+
+.gallery__hint-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  animation: gallery-cue 2.6s var(--ease-in-out) infinite;
+}
+
+@keyframes gallery-cue {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+
+.gallery__outro {
+  position: relative;
+  display: grid;
+  gap: 1.8rem;
+  justify-items: start;
+}
+
+.gallery__outro-text {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 3.8vw, 3.9rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.gallery__outro-text em { font-style: italic; }
+
+/* ————— Photos ————— */
+
+.shot {
+  /* Hauteur de cadre (--h, --mh au doigt) et proportion (--r) par forme. */
+  --r: 3 / 4;
+  position: relative;
+  flex: none;
+  margin: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.shot--arch { --r: 5 / 7; --h: min(62vh, 640px); --mh: min(112vw, 470px); }
+.shot--tall { --r: 3 / 4; --h: min(50vh, 520px); --mh: min(96vw, 400px); }
+.shot--wide { --r: 7 / 5; --h: min(40vh, 420px); --mh: min(62vw, 270px); }
+
+.shot__frame {
+  position: relative;
+  display: block;
+  height: var(--h);
+  width: calc(var(--h) * var(--r));
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--navy-700);
+}
+
+.shot--arch .shot__frame { border-radius: 999px 999px 0 0; }
+
+/* Un filet d'or décalé redessine l'arche : il se recale au survol. */
+.shot--arch::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 14px;
+  width: calc(var(--h) * var(--r));
+  height: var(--h);
+  border: 1px solid rgba(226, 192, 145, 0.42);
+  border-radius: 999px 999px 0 0;
+  pointer-events: none;
+  transition: translate 1s var(--ease-out), border-color 1s var(--ease-out);
+}
+
+.shot--arch:hover::before {
+  translate: -14px 14px;
+  border-color: rgba(226, 192, 145, 0.7);
+}
+
+/* L'image déborde de 6 % de chaque côté : la marge de sa dérive. */
+.shot__img {
+  position: absolute;
+  top: 0;
+  left: -6%;
+  width: 112%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.94) contrast(1.03);
+  transition: scale 1.4s var(--ease-out), filter 1.2s var(--ease-out);
+  user-select: none;
+}
+
+.shot__frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(6, 15, 36, 0.38));
+  transition: opacity 1s var(--ease-out);
+  pointer-events: none;
+}
+
+.shot__frame:hover .shot__img,
+.shot__frame:focus-visible .shot__img {
+  scale: 1.06;
+  filter: saturate(1.04) contrast(1.05);
+}
+
+.shot__frame:hover::after { opacity: 0; }
+
+.shot__caption {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+}
+
+.shot__index {
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-wide);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.shot__room {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  color: var(--fg);
+}
+
+/* ————— Pied : compteur et progression ————— */
+
+.gallery__foot {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.4rem);
+  padding-inline: var(--gutter);
+}
+
+.gallery__count {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  line-height: 1;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.gallery__count span { font-size: 0.66em; color: var(--fg-faint); }
+
+.gallery__bar {
+  position: relative;
+  height: 1px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.gallery__bar span {
+  position: absolute;
+  inset: 0;
+  transform-origin: left;
+  background: var(--grad-gold);
+}
+
+.gallery__room {
+  min-width: 9em;
+  text-align: right;
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ————— Grand écran : épinglée ————— */
+
+.gallery.is-pinned .gallery__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: grid;
+  /* Colonne bornée à l'écran : le rail, lui, déborde et glisse dessous. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  padding-top: var(--nav-h);
+  padding-bottom: clamp(1.4rem, 3.5vh, 2.4rem);
+}
+
+.gallery.is-pinned .gallery__rail {
+  display: flex;
+  align-items: center;
+  gap: clamp(4rem, 8vw, 9rem);
+  width: max-content;
+  height: 100%;
+  padding-inline: var(--gutter) clamp(4rem, 9vw, 9rem);
+  will-change: transform;
+}
+
+.gallery.is-pinned .gallery__intro { flex: none; width: min(36rem, 40vw); }
+.gallery.is-pinned .gallery__outro { flex: none; width: min(28rem, 32vw); }
+
+.gallery.is-pinned .gallery__track {
+  display: flex;
+  align-items: center;
+  gap: clamp(2.6rem, 5vw, 5.5rem);
+  height: 100%;
+}
+
+/* Un rythme vertical : les arches montent, les cadres étroits descendent. */
+.gallery.is-pinned .shot--arch { translate: 0 -3vh; }
+.gallery.is-pinned .shot--tall { translate: 0 8vh; }
+.gallery.is-pinned .shot--wide { translate: 0 -9vh; }
+
+/* ————— Au doigt : défilement horizontal natif ————— */
+
+/* Le rail s'efface : ses enfants se rangent avec le pied, dans l'ordre de lecture. */
+.gallery:not(.is-pinned) .gallery__pin {
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--section-y);
+}
+
+.gallery:not(.is-pinned) .gallery__rail { display: contents; }
+.gallery:not(.is-pinned) .gallery__intro { order: 1; }
+.gallery:not(.is-pinned) .gallery__track { order: 2; }
+.gallery:not(.is-pinned) .gallery__foot { order: 3; }
+.gallery:not(.is-pinned) .gallery__outro { order: 4; }
+
+.gallery:not(.is-pinned) .gallery__ghost { top: 16%; translate: none; left: -4vw; font-size: clamp(7rem, 38vw, 22rem); }
+
+.gallery:not(.is-pinned) .gallery__intro {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-bottom: clamp(2.2rem, 7vw, 3.4rem);
+}
+
+.gallery:not(.is-pinned) .gallery__track {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.1rem;
+  padding: 1rem var(--gutter) 0.4rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+}
+
+.gallery:not(.is-pinned) .gallery__track::-webkit-scrollbar { display: none; }
+
+.gallery:not(.is-pinned) .shot { scroll-snap-align: start; }
+.gallery:not(.is-pinned) .shot__frame { height: var(--mh); width: calc(var(--mh) * var(--r)); }
+.gallery:not(.is-pinned) .shot--arch::before { width: calc(var(--mh) * var(--r)); height: var(--mh); top: -10px; left: 10px; }
+
+.gallery:not(.is-pinned) .gallery__foot {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: clamp(1.4rem, 4vw, 2rem) auto 0;
+}
+
+.gallery:not(.is-pinned) .gallery__outro {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: clamp(3rem, 10vw, 4.5rem) auto 0;
+  padding-inline: var(--gutter);
+}
+
+@media (max-width: 560px) {
+  .gallery__room { min-width: 0; }
+}

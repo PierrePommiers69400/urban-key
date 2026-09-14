@@ -1,0 +1,208 @@
+.manifesto {
+  background: var(--bg);
+}
+
+.manifesto__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
+  gap: clamp(2.5rem, 7vw, 7rem);
+  align-items: start;
+}
+
+.manifesto__head { display: grid; gap: clamp(1.2rem, 2.6vw, 2rem); }
+
+.manifesto__title {
+  font-size: var(--fs-h2);
+  letter-spacing: -0.03em;
+}
+
+.manifesto__lead { max-width: 46ch; }
+
+.manifesto__principles {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: clamp(0.6rem, 2vw, 1.4rem) 0 0;
+  padding: 0;
+  border-top: var(--rule);
+}
+
+.manifesto__principle {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(1rem, 2.4vw, 2rem);
+  padding-block: clamp(1.1rem, 2.4vw, 1.7rem);
+  border-bottom: var(--rule);
+  transition: background 0.6s var(--ease-out);
+}
+
+.manifesto__principle:hover { background: var(--accent-wash); }
+
+.manifesto__principle-index {
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-wide);
+  color: var(--accent);
+  padding-top: 0.45em;
+}
+
+.manifesto__principle h3 {
+  font-size: clamp(1.15rem, 1.7vw, 1.5rem);
+  margin-bottom: 0.5rem;
+  color: var(--fg);
+}
+
+.manifesto__principle p {
+  color: var(--fg-dim);
+  font-size: var(--fs-body);
+  max-width: 48ch;
+}
+
+.manifesto__signature {
+  display: grid;
+  gap: 0.15rem;
+  margin-top: 0.6rem;
+}
+
+.manifesto__sign-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  color: var(--accent);
+}
+
+.manifesto__sign-role {
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.manifesto__aside {
+  position: relative;
+  display: grid;
+  gap: clamp(1.6rem, 4vw, 3rem);
+  padding-top: clamp(1rem, 6vw, 4rem);
+}
+
+.manifesto__frame {
+  position: relative;
+  margin: 0 0 0 clamp(0rem, 3vw, 2.5rem);
+}
+
+/* Le filet d'or redessine l'arche, décalé : la photo semble posée devant. */
+.manifesto__frame::before {
+  content: "";
+  position: absolute;
+  top: calc(clamp(14px, 1.6vw, 22px) * -1);
+  left: clamp(14px, 1.6vw, 22px);
+  right: calc(clamp(14px, 1.6vw, 22px) * -1);
+  aspect-ratio: 4 / 5.4;
+  border: 1px solid rgba(124, 94, 43, 0.45);
+  border-radius: 999px 999px 0 0;
+  pointer-events: none;
+}
+
+.manifesto__arch {
+  position: relative;
+  aspect-ratio: 4 / 5.4;
+  overflow: hidden;
+  border-radius: 999px 999px 0 0;
+  background: var(--paper-3);
+  box-shadow: 0 60px 90px -60px rgba(10, 12, 17, 0.55);
+}
+
+/* Plus haute que l'arche : la réserve de sa dérive au défilement. */
+.manifesto__photo {
+  position: absolute;
+  left: 0;
+  top: -10%;
+  width: 100%;
+  height: 120%;
+  max-width: none;
+  object-fit: cover;
+  transition: scale 1.6s var(--ease-out);
+}
+
+.manifesto__frame:hover .manifesto__photo { scale: 1.04; }
+
+.manifesto__frame figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: clamp(0.8rem, 1.6vw, 1.1rem);
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+.manifesto__frame-year { color: var(--accent); }
+
+/* Tirage glissé contre l'arche, comme une seconde photo sur la table. */
+.manifesto__inset {
+  position: absolute;
+  z-index: 2;
+  right: clamp(-2.5rem, -3vw, -1rem);
+  top: 62%;
+  width: clamp(130px, 15vw, 210px);
+  margin: 0;
+  padding: clamp(6px, 0.6vw, 9px);
+  background: var(--paper);
+  box-shadow: 0 30px 60px -30px rgba(10, 12, 17, 0.5);
+  rotate: 3deg;
+}
+
+.manifesto__inset img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.manifesto__badge {
+  position: absolute;
+  z-index: 2;
+  left: clamp(-40px, -2vw, -12px);
+  top: 30%;
+  color: var(--navy-800);
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  background: var(--paper);
+  border-radius: 50%;
+  box-shadow: 0 18px 40px -22px rgba(10, 12, 17, 0.45);
+}
+
+
+.rotary { position: relative; display: grid; place-items: center; }
+.rotary__ring { width: 100%; height: 100%; }
+
+.rotary__core {
+  position: absolute;
+  width: 24%;
+  height: auto;
+  color: var(--navy-800);
+}
+
+.manifesto__quote p {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2vw, 1.85rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--fg);
+  padding-left: clamp(1rem, 2vw, 1.6rem);
+  border-left: var(--rule-strong);
+}
+
+.manifesto__quote em { font-style: italic; color: var(--accent); }
+
+@media (max-width: 1024px) {
+  .manifesto__grid { grid-template-columns: 1fr; }
+  .manifesto__aside { max-width: 34rem; width: 88%; justify-self: center; }
+  .manifesto__badge { left: -8%; top: 12%; }
+  .manifesto__inset { right: -8%; }
+}
+
+@media (max-width: 620px) {
+  .manifesto__badge { display: none; }
+  .manifesto__inset { width: 38%; right: -6%; top: 58%; }
+}

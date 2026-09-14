@@ -1,0 +1,157 @@
+/* ============================================================
+   URBAN KEY — Design tokens
+   Direction : éditorial sur papier. Le blanc domine, le noir
+   reste discret, le bleu nuit ne sert que de ponctuation.
+   ============================================================ */
+
+:root {
+  /* — Papiers — */
+  --paper: #fdfcfa;
+  --paper-2: #f6f4ef;
+  --paper-3: #ebe8e0;
+
+  /* — Bleu nuit de la marque — */
+  --navy-900: #060f24;
+  --navy-800: #0b1b3a; /* bleu du logo */
+  --navy-700: #102449;
+  --navy-600: #17305c;
+  --navy-500: #22406f;
+
+  /* — Ors — */
+  --gold-100: #f6e3c4;
+  --gold-200: #edd3a8;
+  --gold-300: #e2c091;
+  --gold-400: #d3ac77;
+  --gold-500: #c39a62;
+  --gold-600: #a87f47;
+  --gold-700: #86622f;
+  --gold-deep: #7c5e2b; /* le seul or lisible sur papier */
+
+  /* — Encre — */
+  --black: #0a0c11;
+
+  /* ————————————————————————————————
+     Couche sémantique — thème papier
+     Les blocs bleus (.on-navy) réécrivent ces mêmes jetons,
+     de sorte qu'aucun composant n'a besoin de connaître son fond.
+     ———————————————————————————————— */
+  --bg: var(--paper);
+  --bg-alt: var(--paper-2);
+  --fg: var(--black);
+  --fg-dim: rgba(10, 12, 17, 0.74);
+  --fg-faint: rgba(10, 12, 17, 0.5);
+
+  --accent: var(--navy-800);
+  --accent-2: var(--navy-600);
+  --accent-wash: rgba(11, 27, 58, 0.05);
+  --accent-glow: rgba(11, 27, 58, 0.14);
+
+  --line: rgba(10, 12, 17, 0.13);
+  --line-strong: rgba(10, 12, 17, 0.3);
+  --rule: 1px solid var(--line);
+  --rule-strong: 1px solid var(--line-strong);
+
+  --btn-bg: var(--navy-800);
+  --btn-bg-hover: var(--black);
+  --btn-fg: var(--paper);
+
+
+  --shadow-lift: 0 34px 70px -48px rgba(10, 12, 17, 0.4);
+  --shadow-card: 0 1px 0 rgba(10, 12, 17, 0.04), 0 18px 40px -34px rgba(10, 12, 17, 0.35);
+
+  /* — Dégradés — */
+  --grad-gold: linear-gradient(
+    104deg,
+    #86622f 0%,
+    #d3ac77 22%,
+    #f8ecd6 42%,
+    #c39a62 58%,
+    #e2c091 78%,
+    #8d6a35 100%
+  );
+  --grad-gold-text: linear-gradient(
+    100deg,
+    #d9b585 0%,
+    #f2ddb9 26%,
+    #fdf5e7 46%,
+    #ecd4ab 66%,
+    #f8e9d0 84%,
+    #dcb98c 100%
+  );
+  /* Sur papier, le mot mis en valeur se lit en bleu nuit. */
+  --grad-accent-text: linear-gradient(
+    100deg,
+    #17305c 0%,
+    #0b1b3a 34%,
+    #24467a 62%,
+    #0b1b3a 100%
+  );
+  --grad-night: radial-gradient(120% 90% at 50% -10%, #17305c 0%, #0b1b3a 44%, #060f24 100%);
+
+  /* — Typographie — */
+  --font-display: "Newsreader", "Iowan Old Style", "Georgia", serif;
+  --font-body: "Instrument Sans", "Helvetica Neue", "Segoe UI", sans-serif;
+
+  --fs-display: clamp(3.2rem, 10.5vw, 11rem);
+  --fs-h1: clamp(2.4rem, 4.6vw, 4.6rem);
+  --fs-h2: clamp(2.2rem, 5vw, 4.8rem);
+  --fs-h3: clamp(1.4rem, 2.1vw, 2rem);
+  --fs-lead: clamp(1.08rem, 1.35vw, 1.32rem);
+  --fs-body: clamp(1rem, 1.06vw, 1.1rem);
+  --fs-small: 0.9rem;
+  --fs-label: 0.76rem;
+
+  --track-label: 0.18em;
+  --track-wide: 0.1em;
+
+  /* — Rythme — */
+  --gutter: clamp(1.25rem, 5vw, 5.5rem);
+  --section-y: clamp(5rem, 10vh, 8.5rem);
+  --maxw: 1440px;
+  --maxw-text: 62ch;
+
+  /* — Courbes — */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+
+  --nav-h: 84px;
+}
+
+/* ————— Ponctuation bleu nuit ————— */
+
+.on-navy {
+  --bg: var(--navy-800);
+  --bg-alt: var(--navy-900);
+  --fg: #f7f4ef;
+  --fg-dim: rgba(247, 244, 239, 0.82);
+  --fg-faint: rgba(247, 244, 239, 0.62);
+
+  --accent: var(--gold-300);
+  --accent-2: var(--gold-200);
+  --accent-wash: rgba(226, 192, 145, 0.08);
+  --accent-glow: rgba(226, 192, 145, 0.3);
+
+  --line: rgba(226, 192, 145, 0.24);
+  --line-strong: rgba(226, 192, 145, 0.44);
+
+  --btn-bg: var(--grad-gold);
+  --btn-bg-hover: var(--grad-gold);
+  --btn-fg: var(--navy-900);
+
+
+  --grad-accent-text: var(--grad-gold-text);
+  --shadow-lift: 0 40px 90px -50px rgba(3, 8, 26, 0.9);
+  --shadow-card: 0 30px 70px -50px rgba(3, 8, 26, 0.9);
+
+  color: var(--fg);
+  background-color: var(--bg);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --nav-h: 68px;
+    --track-label: 0.14em;
+    --track-wide: 0.08em;
+  }
+}

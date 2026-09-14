@@ -1,0 +1,101 @@
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 960;
+  display: grid;
+  place-items: center;
+  padding: clamp(4.5rem, 9vh, 6rem) clamp(1rem, 8vw, 7rem);
+  background: rgba(6, 15, 36, 0.94);
+  backdrop-filter: blur(14px);
+}
+
+.lightbox__figure {
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  max-height: 100%;
+}
+
+.lightbox__img {
+  max-width: 100%;
+  max-height: calc(100svh - clamp(9rem, 20vh, 13rem));
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0 60px 120px -60px rgba(0, 0, 0, 0.9);
+  user-select: none;
+}
+
+.lightbox__caption {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+  color: var(--fg-dim);
+}
+
+.lightbox__count {
+  font-size: var(--fs-label);
+  letter-spacing: var(--track-wide);
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.lightbox__count span { color: var(--fg-faint); }
+
+.lightbox__room {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+  color: var(--fg);
+}
+
+.lightbox__arrow,
+.lightbox__close {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  color: var(--fg);
+  border: var(--rule-strong);
+  border-radius: 50%;
+  transition: background 0.5s var(--ease-out), color 0.5s var(--ease-out),
+    border-color 0.5s var(--ease-out);
+}
+
+.lightbox__arrow { top: 50%; translate: 0 -50%; font-size: 1.1rem; }
+.lightbox__arrow--prev { left: clamp(0.8rem, 2.4vw, 2.4rem); }
+.lightbox__arrow--next { right: clamp(0.8rem, 2.4vw, 2.4rem); }
+
+.lightbox__arrow:hover,
+.lightbox__close:hover {
+  color: var(--navy-900);
+  background: var(--gold-200);
+  border-color: transparent;
+}
+
+.lightbox__close {
+  top: clamp(0.9rem, 2.4vh, 1.6rem);
+  right: clamp(0.8rem, 2.4vw, 2.4rem);
+  width: 46px;
+  height: 46px;
+}
+
+.lightbox__close span {
+  position: absolute;
+  width: 16px;
+  height: 1px;
+  background: currentColor;
+}
+
+.lightbox__close span:first-child { transform: rotate(45deg); }
+.lightbox__close span:last-child { transform: rotate(-45deg); }
+
+@media (max-width: 720px) {
+  .lightbox { padding-inline: 0.6rem; }
+  .lightbox__arrow { top: auto; bottom: 1.2rem; translate: none; width: 46px; height: 46px; }
+  .lightbox__arrow--prev { left: calc(50% - 58px); }
+  .lightbox__arrow--next { right: calc(50% - 58px); }
+  .lightbox__img { max-height: calc(100svh - 12rem); }
+}

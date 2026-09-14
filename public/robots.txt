@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pierrepommiers69400.github.io/urban-key/sitemap.xml

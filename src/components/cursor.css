@@ -1,0 +1,48 @@
+.has-custom-cursor,
+.has-custom-cursor * { cursor: none !important; }
+
+.cursor-ring,
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  pointer-events: none;
+  border-radius: 999px;
+  will-change: transform;
+  /* Une seule couleur pour les deux fonds : la différence inverse le curseur
+     sur le papier comme sur les blocs bleu nuit. */
+  mix-blend-mode: difference;
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid #f4efe7;
+  display: grid;
+  place-items: center;
+}
+
+.cursor-ring--view {
+  background: rgba(244, 239, 231, 0.16);
+  border-color: rgba(244, 239, 231, 0.7);
+}
+
+.cursor-ring--text { border-color: #f4efe7; }
+
+.cursor-ring__label {
+  font-family: var(--font-body);
+  font-size: 3.1px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #f4efe7;
+  white-space: nowrap;
+}
+
+.cursor-dot {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  background: #f4efe7;
+}

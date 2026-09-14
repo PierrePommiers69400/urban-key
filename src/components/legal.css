@@ -1,0 +1,113 @@
+.legal {
+  position: fixed;
+  inset: 0;
+  z-index: 960;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vh, 3rem) var(--gutter);
+  background: rgba(6, 15, 36, 0.92);
+  backdrop-filter: blur(10px);
+  overflow-y: auto;
+}
+
+.legal__sheet {
+  width: min(100%, 62rem);
+  max-height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  background: var(--navy-800);
+  border: var(--rule);
+  box-shadow: 0 50px 100px -60px rgba(3, 8, 26, 1);
+}
+
+.legal__head {
+  position: relative;
+  display: grid;
+  gap: 0.6rem;
+  padding: clamp(1.6rem, 3vw, 2.6rem) clamp(1.4rem, 3vw, 3rem);
+  border-bottom: var(--rule);
+}
+
+.legal__head h2 {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  color: var(--fg);
+}
+
+.legal__close {
+  position: absolute;
+  top: clamp(1.2rem, 2.5vw, 2rem);
+  right: clamp(1.2rem, 2.5vw, 2rem);
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: var(--rule-strong);
+  border-radius: 50%;
+  transition: background 0.5s var(--ease-out);
+}
+
+.legal__close:hover { background: var(--accent-wash); }
+
+.legal__close span {
+  position: absolute;
+  width: 16px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.legal__close span:first-child { transform: rotate(45deg); }
+.legal__close span:last-child { transform: rotate(-45deg); }
+
+.legal__body {
+  overflow-y: auto;
+  display: grid;
+  gap: clamp(1.6rem, 3vw, 2.4rem);
+  padding: clamp(1.6rem, 3vw, 2.6rem) clamp(1.4rem, 3vw, 3rem) clamp(2rem, 4vw, 3rem);
+}
+
+.legal__body h3 {
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  color: var(--accent);
+  margin-bottom: 0.7rem;
+}
+
+.legal__body p {
+  color: var(--fg-dim);
+  max-width: 68ch;
+  font-size: var(--fs-small);
+  line-height: 1.75;
+}
+
+.legal__body dl {
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+  font-size: var(--fs-small);
+}
+
+.legal__body dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  gap: 0.5rem 1.5rem;
+  padding-bottom: 0.55rem;
+  border-bottom: var(--rule);
+}
+
+.legal__body dt {
+  color: var(--fg-faint);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  font-size: var(--fs-label);
+  padding-top: 0.15em;
+}
+
+.legal__body dd {
+  margin: 0;
+  color: var(--fg);
+}
+
+@media (max-width: 620px) {
+  .legal { padding: 0; }
+  .legal__sheet { min-height: 100%; border: 0; }
+  .legal__body dl > div { grid-template-columns: 1fr; gap: 0.15rem; }
+}
