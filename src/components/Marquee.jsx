@@ -1,14 +1,14 @@
 import {
   motion,
-  useAnimationFrame,
   useMotionValue,
   useScroll,
   useSpring,
   useTransform,
   useVelocity,
   useReducedMotion,
+  useInView,
 } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { marqueeWords } from "../data/content";
 import "./marquee.css";
 
@@ -19,6 +19,9 @@ const wrap = (min, max, v) => {
 
 export default function Marquee({ speed = 34 }) {
   const reduced = useReducedMotion();
+  const ref = useRef(null);
+  // Hors de l'écran, le bandeau s'arrête : inutile de le calculer à chaque image.
+  const inView = useInView(ref, { margin: "120px 0px" });
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
@@ -28,20 +31,31 @@ export default function Marquee({ speed = 34 }) {
   const direction = useRef(1);
   const x = useTransform(baseX, (v) => `${wrap(-25, 0, v)}%`);
 
-  useAnimationFrame((_, delta) => {
-    if (reduced) return;
-    let move = ((direction.current * speed * delta) / 1000 / window.innerWidth) * 100;
-    const f = factor.get();
-    if (f < 0) direction.current = -1;
-    else if (f > 0) direction.current = 1;
-    move += move * Math.abs(f);
-    baseX.set(baseX.get() + move * -1);
-  });
+  // Boucle propre au bandeau, montée seulement quand il est visible :
+  // `useAnimationFrame` gardait la boucle de Motion éveillée sur toute la page.
+  useEffect(() => {
+    if (reduced || !inView) return undefined;
+    let frame = 0;
+    let last = performance.now();
+    const tick = (now) => {
+      const delta = Math.min(now - last, 64);
+      last = now;
+      let move = ((direction.current * speed * delta) / 1000 / window.innerWidth) * 100;
+      const f = factor.get();
+      if (f < 0) direction.current = -1;
+      else if (f > 0) direction.current = 1;
+      move += move * Math.abs(f);
+      baseX.set(baseX.get() + move * -1);
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [reduced, inView, speed, factor, baseX]);
 
   const items = [...marqueeWords, ...marqueeWords, ...marqueeWords, ...marqueeWords];
 
   return (
-    <div className="marquee on-navy" aria-hidden="true">
+    <div className={`marquee on-navy ${inView ? "" : "is-paused"}`} ref={ref} aria-hidden="true">
       <motion.div className="marquee__track" style={{ x, skewX: reduced ? 0 : skew }}>
         {items.map((word, i) => (
           <span className="marquee__item" key={i}>

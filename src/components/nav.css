@@ -11,8 +11,10 @@
 }
 
 .nav.is-scrolled {
-  background: rgba(253, 252, 250, 0.85);
-  backdrop-filter: blur(18px) saturate(120%);
+  /* Un fond presque opaque demande un flou bien plus court : c'est lui qui
+     se recalcule à chaque image de défilement. */
+  background: rgba(253, 252, 250, 0.92);
+  backdrop-filter: blur(8px);
   border-bottom-color: var(--line);
 }
 
@@ -20,7 +22,7 @@
 .nav.on-navy { background-color: transparent; }
 
 .nav.is-scrolled.on-navy {
-  background: rgba(6, 15, 36, 0.72);
+  background: rgba(6, 15, 36, 0.86);
   border-bottom-color: var(--line);
 }
 

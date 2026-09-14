@@ -1,5 +1,5 @@
 import { Component, lazy, Suspense, useCallback, useEffect, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion, useTransform } from "motion/react";
 import Wordmark from "./Wordmark";
 import "./key-backdrop.css";
 
@@ -44,6 +44,9 @@ const canRender3D = () => {
 export default function KeyBackdrop({ progress, pointer, opacity }) {
   const reduced = useReducedMotion();
   const [capable] = useState(() => canRender3D());
+  // Effacé, le décor sort du rendu : plus de calques plein écran à composer
+  // (ni leur flou) sur toute la longueur de la page.
+  const visibility = useTransform(opacity, (v) => (v < 0.01 ? "hidden" : "visible"));
   const armed = capable && !reduced;
 
   // La clé à plat tient le cadre jusqu'à la première image de la scène,
@@ -79,7 +82,7 @@ export default function KeyBackdrop({ progress, pointer, opacity }) {
   }, [armed, pointer]);
 
   return (
-    <motion.div className="keyback" style={{ opacity }} aria-hidden="true">
+    <motion.div className="keyback" style={{ opacity, visibility }} aria-hidden="true">
       <Wordmark variant="key" className={`keyback__still ${live ? "is-faded" : ""}`} />
       {mounted && (
         <SceneBoundary>

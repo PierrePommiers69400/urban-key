@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { motion } from "motion/react";
 import { brand, navLinks, services } from "../data/content";
 import Wordmark from "./ui/Wordmark";
 import Magnetic from "./ui/Magnetic";
@@ -85,16 +84,14 @@ export default function Footer() {
           </div>
         </div>
 
-        <motion.div
+        <div
           ref={markRef}
-          className="footer__wordmark"
-          initial={{ opacity: 0, y: 40 }}
-          animate={markRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          className={`footer__wordmark reveal ${markRevealed ? "is-in" : ""}`}
+          style={{ "--reveal-y": "40px", "--reveal-duration": "1.4s" }}
           aria-hidden="true"
         >
           <Wordmark className="footer__logo" />
-        </motion.div>
+        </div>
 
         <div className="footer__bottom">
           <span>© {year} {brand.legalName} — {brand.address}</span>

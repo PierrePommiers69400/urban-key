@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { motion } from "motion/react";
 import useRevealed from "./ui/useRevealed";
 import { services } from "../data/content";
 import SplitText from "./ui/SplitText";
@@ -20,13 +19,11 @@ function ServiceCard({ service, index, open, onToggle }) {
   };
 
   return (
-    <motion.article
+    <article
       ref={ref}
-      className={`service ${open ? "is-open" : ""}`}
+      className={`service reveal ${revealed ? "is-in" : ""} ${open ? "is-open" : ""}`}
       onMouseMove={onMove}
-      initial={{ opacity: 0, y: 46 }}
-      animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 46 }}
-      transition={{ duration: 1, delay: (index % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      style={{ "--reveal-y": "46px", "--reveal-delay": `${(index % 3) * 0.1}s`, "--reveal-duration": "1s" }}
     >
       <div className="service__spot" />
       {/* Au téléphone, la carte se replie en ligne : ce bouton la déplie. */}
@@ -62,7 +59,7 @@ function ServiceCard({ service, index, open, onToggle }) {
       </div>
       <span className="service__corner service__corner--tl" />
       <span className="service__corner service__corner--br" />
-    </motion.article>
+    </article>
   );
 }
 

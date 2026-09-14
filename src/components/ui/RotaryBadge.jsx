@@ -1,5 +1,3 @@
-import { motion, useReducedMotion } from "motion/react";
-
 /**
  * Sceau circulaire : un texte en rotation lente autour d'une serrure gravée.
  *
@@ -14,28 +12,26 @@ export default function RotaryBadge({
   duration = 26,
   className = "",
 }) {
-  const reduced = useReducedMotion();
   return (
     <div className={`rotary ${className}`} style={{ width: size, height: size }} aria-hidden="true">
-      <motion.svg
-        className="rotary__ring"
-        viewBox="0 0 200 200"
-        animate={reduced ? undefined : { rotate: 360 }}
-        transition={{ duration, ease: "linear", repeat: Infinity }}
-      >
-        <defs>
-          <path id="rotary-path" d="M100 100m-72 0a72 72 0 1 1 144 0a72 72 0 1 1-144 0" fill="none" />
-        </defs>
-        <circle cx="100" cy="100" r="93" fill="none" stroke="rgba(196,158,100,.5)" />
-        <circle cx="100" cy="100" r="48" fill="none" stroke="rgba(196,158,100,.32)" />
-        <text fill="currentColor">
-          {/* textLength cale les deux répétitions exactement sur la circonférence :
-              sans cela, la fin du texte chevauche son début. */}
-          <textPath href="#rotary-path" startOffset="0%" textLength="452" lengthAdjust="spacing">
-            {text.repeat(2)}
-          </textPath>
-        </text>
-      </motion.svg>
+      {/* Rotation en CSS sur une boîte HTML : le compositeur la joue seul.
+          Posée sur le SVG lui-même, elle forçait à le repeindre à chaque image. */}
+      <div className="rotary__spin" style={{ animationDuration: `${duration}s` }}>
+        <svg className="rotary__ring" viewBox="0 0 200 200">
+          <defs>
+            <path id="rotary-path" d="M100 100m-72 0a72 72 0 1 1 144 0a72 72 0 1 1-144 0" fill="none" />
+          </defs>
+          <circle cx="100" cy="100" r="93" fill="none" stroke="rgba(196,158,100,.5)" />
+          <circle cx="100" cy="100" r="48" fill="none" stroke="rgba(196,158,100,.32)" />
+          <text fill="currentColor">
+            {/* textLength cale les deux répétitions exactement sur la circonférence :
+                sans cela, la fin du texte chevauche son début. */}
+            <textPath href="#rotary-path" startOffset="0%" textLength="452" lengthAdjust="spacing">
+              {text.repeat(2)}
+            </textPath>
+          </text>
+        </svg>
+      </div>
 
       <svg className="rotary__core" viewBox="0 0 48 52" fill="currentColor">
         <circle cx="24" cy="18" r="9" />

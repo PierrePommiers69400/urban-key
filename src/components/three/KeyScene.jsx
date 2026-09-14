@@ -113,11 +113,11 @@ export default function KeyScene({ progress, pointer, onReady }) {
     const aim = { y: 0.55, rx: 0, ry: 0, rz: 0 };
     const clock = new THREE.Clock();
     let frame = 0;
+    let sleeping = false;
+    let odd = false;
+    const still = { x: NaN, y: NaN, p: NaN, since: 0 };
 
-    const loop = () => {
-      frame = requestAnimationFrame(loop);
-      const delta = Math.min(clock.getDelta(), 0.1);
-      const t = clock.elapsedTime;
+    const loop = (now = performance.now()) => {
       const p = progress.current;
 
       /*
@@ -126,9 +126,27 @@ export default function KeyScene({ progress, pointer, onReady }) {
        * seconde pour rien, sur toute la longueur de la page. On s'arrête —
        * sans risque de clignotement, puisqu'il n'y a plus rien à voir.
        */
-      if (p > 0.82) return;
+      if (p > 0.82) {
+        sleeping = true;
+        return;
+      }
+      frame = requestAnimationFrame(loop);
       const px = pointer.current.x;
       const py = pointer.current.y;
+
+      /*
+       * Sans souris ni défilement depuis une seconde, la clé ne fait plus que
+       * respirer — un mouvement si lent que trente images par seconde suffisent.
+       * Sur une carte graphique intégrée, c'est la moitié du travail en moins.
+       */
+      if (px !== still.x || py !== still.y || p !== still.p) {
+        Object.assign(still, { x: px, y: py, p, since: now });
+      } else if (now - still.since > 1000 && (odd = !odd)) {
+        return;
+      }
+
+      const delta = Math.min(clock.getDelta(), 0.1);
+      const t = clock.elapsedTime;
 
       /*
        * Deux gestes, deux effets, sans recouvrement :
@@ -166,9 +184,20 @@ export default function KeyScene({ progress, pointer, onReady }) {
     };
     loop();
 
+    // Endormie plus bas dans la page, la boucle ne réclame plus aucune image ;
+    // le moindre défilement la relance, et elle se rendort d'elle-même si le
+    // premier écran est encore loin.
+    const wake = () => {
+      if (!sleeping) return;
+      sleeping = false;
+      frame = requestAnimationFrame(loop);
+    };
+    window.addEventListener("scroll", wake, { passive: true });
+
     return () => {
       disposed = true;
       cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", wake);
       window.removeEventListener("resize", fit);
       window.removeEventListener("orientationchange", fit);
       scene.traverse((o) => {

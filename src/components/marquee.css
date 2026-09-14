@@ -31,8 +31,11 @@
   height: clamp(14px, 1.6vw, 20px);
   color: var(--accent);
   animation: sep-spin 14s linear infinite;
+  will-change: transform;
 }
 
 @keyframes sep-spin {
   to { transform: rotate(360deg); }
 }
+
+.marquee.is-paused .marquee__sep { animation-play-state: paused; }

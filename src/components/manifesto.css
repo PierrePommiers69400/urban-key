@@ -33,7 +33,10 @@
   gap: clamp(1rem, 2.4vw, 2rem);
   padding-block: clamp(1.1rem, 2.4vw, 1.7rem);
   border-bottom: var(--rule);
-  transition: background 0.6s var(--ease-out);
+  transition:
+    background 0.6s var(--ease-out),
+    opacity var(--reveal-duration) var(--ease-out) var(--reveal-delay),
+    transform var(--reveal-duration) var(--ease-out) var(--reveal-delay);
 }
 
 .manifesto__principle:hover { background: var(--accent-wash); }
@@ -174,7 +177,16 @@
 
 
 .rotary { position: relative; display: grid; place-items: center; }
+.rotary__spin {
+  width: 100%;
+  height: 100%;
+  animation: rotary-spin 26s linear infinite;
+  will-change: transform;
+}
+
 .rotary__ring { width: 100%; height: 100%; }
+
+@keyframes rotary-spin { to { transform: rotate(360deg); } }
 
 .rotary__core {
   position: absolute;
@@ -218,3 +230,34 @@
   .manifesto__aside { width: 80%; gap: 1.6rem; padding-top: 0.8rem; }
   .manifesto__quote p { font-size: 1.15rem; }
 }
+
+/*
+ * Profondeur au défilement : le cadre monte, la photo glisse à contre-sens
+ * dans son arche, le tirage file plus vite. Le navigateur pilote tout depuis
+ * la position de la section, sans une ligne de JavaScript à chaque image ;
+ * là où il ne sait pas le faire, la composition reste simplement immobile.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .manifesto { view-timeline: --manifesto block; }
+
+    .manifesto__frame,
+    .manifesto__photo,
+    .manifesto__inset,
+    .manifesto__badge {
+      animation: linear both;
+      animation-timeline: --manifesto;
+      will-change: transform;
+    }
+
+    .manifesto__frame { animation-name: manifesto-frame; }
+    .manifesto__photo { animation-name: manifesto-photo; }
+    .manifesto__inset { animation-name: manifesto-inset; }
+    .manifesto__badge { animation-name: manifesto-badge; }
+  }
+}
+
+@keyframes manifesto-frame { from { transform: translateY(6%); } to { transform: translateY(-6%); } }
+@keyframes manifesto-photo { from { transform: translateY(-8%); } to { transform: translateY(8%); } }
+@keyframes manifesto-inset { from { transform: translateY(40%); } to { transform: translateY(-40%); } }
+@keyframes manifesto-badge { from { transform: translateY(26px); } to { transform: translateY(-26px); } }

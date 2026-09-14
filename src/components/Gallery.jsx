@@ -11,6 +11,7 @@ import SplitText from "./ui/SplitText";
 import Reveal from "./ui/Reveal";
 import Magnetic from "./ui/Magnetic";
 import Lightbox from "./ui/Lightbox";
+import useRevealed from "./ui/useRevealed";
 import { pad, photoSrc, photoSrcSet } from "./ui/photos";
 import "./gallery.css";
 
@@ -35,7 +36,7 @@ function usePinned() {
   return wide && !reduced;
 }
 
-function Shot({ photo, i, drift, onOpen }) {
+function Shot({ photo, i, drift, eager, onOpen }) {
   return (
     <figure className={`shot shot--${photo.shape}`}>
       <button
@@ -51,7 +52,7 @@ function Shot({ photo, i, drift, onOpen }) {
           sizes="(max-width: 900px) 80vw, 40vw"
           alt={photo.alt}
           style={{ x: drift, objectPosition: photo.focus }}
-          loading="lazy"
+          loading={eager ? "eager" : "lazy"}
           decoding="async"
           draggable="false"
         />
@@ -73,6 +74,10 @@ export default function Gallery() {
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState(null);
   const close = useCallback(() => setOpen(null), []);
+  // Décalées sur le rail, les photos sont « hors écran » pour le navigateur
+  // jusqu'au dernier moment : on les charge dès que la section approche,
+  // plutôt que de les décoder en plein glissement.
+  const near = useRevealed(sectionRef, 0, 2.5);
 
   // La course horizontale = ce qui dépasse de l'écran. La hauteur de la
   // section en découle : un pixel de défilement, un pixel de glissement.
@@ -176,6 +181,7 @@ export default function Gallery() {
                 photo={photo}
                 i={i}
                 drift={pinned ? drift : undefined}
+                eager={near}
                 onOpen={setOpen}
               />
             ))}

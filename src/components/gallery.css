@@ -158,10 +158,14 @@
   max-width: none;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.94) contrast(1.03);
-  transition: scale 1.4s var(--ease-out), filter 1.2s var(--ease-out);
+  transition: scale 1.4s var(--ease-out);
   user-select: none;
 }
+
+/* Épinglée, chaque photo glisse dans son cadre : un calque à elle, pour ne
+   pas repeindre l'image entière à chaque image de défilement. */
+.gallery.is-pinned .shot__img,
+.gallery.is-pinned .gallery__ghost { will-change: transform; }
 
 .shot__frame::after {
   content: "";
@@ -173,10 +177,7 @@
 }
 
 .shot__frame:hover .shot__img,
-.shot__frame:focus-visible .shot__img {
-  scale: 1.06;
-  filter: saturate(1.04) contrast(1.05);
-}
+.shot__frame:focus-visible .shot__img { scale: 1.06; }
 
 .shot__frame:hover::after { opacity: 0; }
 

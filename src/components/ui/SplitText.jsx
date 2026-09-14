@@ -1,5 +1,4 @@
 import { Fragment, useRef } from "react";
-import { motion, useReducedMotion } from "motion/react";
 import useRevealed from "./useRevealed";
 
 /**
@@ -14,6 +13,9 @@ import useRevealed from "./useRevealed";
  * Les mots sont séparés par une vraie espace et non par une marge : le titre
  * doit se lire « Vous gardez » à la copie, au lecteur d'écran et au robot
  * d'indexation, pas seulement à l'œil.
+ *
+ * La montée des mots est une transition CSS (voir `.split__word`) : une
+ * centaine de mots animés en JavaScript repeignaient le titre à chaque image.
  */
 export default function SplitText({
   lines,
@@ -25,14 +27,10 @@ export default function SplitText({
   animate = "inView",
 }) {
   const ref = useRef(null);
-  const reduced = useReducedMotion();
   const inView = useRevealed(ref, 0.25);
   // « none » : le titre est là dès la première image, sans état de départ.
   const instant = animate === "none";
   const active = animate === "mount" || instant ? true : inView;
-
-  const from = reduced ? { opacity: 0 } : { y: "112%", rotate: 3, opacity: 1 };
-  const to = reduced ? { opacity: 1 } : { y: "0%", rotate: 0, opacity: 1 };
 
   // Index global de chaque mot, calculé avant le rendu : il pilote le décalage.
   const offsets = [];
@@ -42,7 +40,11 @@ export default function SplitText({
   }, 0);
 
   return (
-    <Tag className={`split ${className}`} ref={ref}>
+    <Tag
+      className={`split ${instant ? "is-static" : active ? "is-in" : ""} ${className}`}
+      ref={ref}
+      style={{ "--split-duration": `${duration}s` }}
+    >
       {lines.map((line, li) => (
         <Fragment key={li}>
           {li > 0 ? "\n" : null}
@@ -53,7 +55,7 @@ export default function SplitText({
               return (
                 <Fragment key={`${li}-${wi}`}>
                   <span className="split__mask">
-                    <motion.span
+                    <span
                       className={[
                         "split__word",
                         word.gold ? "accent-text" : "",
@@ -62,16 +64,10 @@ export default function SplitText({
                       ]
                         .filter(Boolean)
                         .join(" ")}
-                      initial={instant ? false : from}
-                      animate={active ? to : from}
-                      transition={{
-                        duration,
-                        delay: delay + i * stagger,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
+                      style={instant ? undefined : { transitionDelay: `${delay + i * stagger}s` }}
                     >
                       {word.text}
-                    </motion.span>
+                    </span>
                   </span>
                   {wi < words.length - 1 ? " " : null}
                 </Fragment>

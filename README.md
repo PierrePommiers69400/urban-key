@@ -111,10 +111,12 @@ Quatre précautions gardent le reste du site indemne :
   `@gltf-transform/cli`).
 - **Le rendu est économe.** Densité de pixels bridée sous 0,7, pas
   d'antialiasing : le décor est flou, le calculer net serait du gaspillage.
-- **Rien ne clignote.** La boucle de rendu ne se met jamais en veille — WebGL
-  vide son tampon dès qu'on cesse de dessiner, la clé disparaîtrait à chaque
-  passage. La clé à plat tient le cadre jusqu'à la première image de la scène,
-  puis s'efface en fondu.
+- **Rien ne clignote.** La clé à plat tient le cadre jusqu'à la première image
+  de la scène, puis s'efface en fondu.
+- **Rien ne tourne pour rien.** Sans souris ni défilement depuis une seconde,
+  la scène passe à trente images par seconde ; une fois le décor effacé, sa
+  boucle s'endort et le défilement la réveille. Le calque plein écran sort
+  alors du rendu (`visibility: hidden`).
 
 Pas de WebGL 2, écran de moins de 860 px, mouvement réduit demandé ou scène en
 échec : la clé à plat reste seule, avec son flottement en CSS. La constante
@@ -191,14 +193,36 @@ via **FormSubmit** — gratuit, sans compte (`FORM_ENDPOINT` dans
 
 ## Motion
 
-Animations pilotées par [`motion`](https://motion.dev) (successeur de
-Framer Motion) :
-
 - titres révélés mot à mot depuis un masque — **sauf celui du premier écran**,
   qui est peint dès la première image : c'est la phrase qu'on doit lire en
   arrivant, elle n'attend rien ;
 - parallaxe de section, bandeau réactif à la vitesse de défilement,
-  frise verticale progressive, compteurs, carrousel, accordéon.
+  frise verticale progressive, galerie épinglée, compteurs, accordéons.
+
+### Règles de performance
+
+Mesurées au profileur (Chrome, processeur ralenti ×4) : la page repeignait
+tout le document soixante fois par seconde, même à l'arrêt. Pour que ça ne
+revienne pas :
+
+- **Révélations en CSS.** `Reveal`, `SplitText`, les cartes de services et de
+  formules basculent une classe `is-in` ; les transitions `transform` /
+  `opacity` sont jouées par le compositeur, sans repeindre.
+- **Parallaxes en CSS.** Manifeste, chiffres et méthode utilisent
+  `animation-timeline` (`view-timeline` nommée sur la section) sous
+  `@supports` : aucun JavaScript par image, et là où ce n'est pas pris en
+  charge la mise en page reste simplement immobile. `motion` ne pilote plus
+  au défilement que le premier écran (lié à la 3D) et la galerie (qui doit
+  mesurer son rail).
+- **Pas de rotation sur un SVG.** Animer le `<svg>` lui-même le fait
+  repeindre à chaque image : on fait tourner une boîte HTML qui le contient
+  (`.rotary__spin`).
+- **Aucune boucle hors écran.** Le bandeau n'a de boucle que lorsqu'il est
+  visible ; éviter `useAnimationFrame`, qui garde celle de Motion éveillée.
+- **Une seule écoute du défilement** pour tous les déclencheurs d'apparition
+  (`useRevealed`), une seule image d'animation par cran.
+- **Calque dédié** (`will-change: transform`) pour tout élément déplacé en
+  JavaScript à chaque image (photos de la galerie, texte du premier écran).
 
 `prefers-reduced-motion` est respecté partout : les révélations deviennent de
 simples fondus et la galerie cesse de s'épingler.

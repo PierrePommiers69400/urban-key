@@ -132,6 +132,31 @@ img, svg { display: block; max-width: 100%; }
   border: 0;
 }
 
+/* ————— Révélations au défilement ————— */
+
+/*
+ * Transitions CSS plutôt qu'animations JavaScript : transform et opacity
+ * passent par le compositeur, sans repeindre le bloc à chaque image.
+ * Un composant qui a déjà sa propre `transition` doit y ajouter ces deux
+ * propriétés (voir .manifesto__principle, .service, .plan).
+ */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-y, 34px), 0);
+  transition:
+    opacity var(--reveal-duration, 1.05s) var(--ease-out) var(--reveal-delay, 0s),
+    transform var(--reveal-duration, 1.05s) var(--ease-out) var(--reveal-delay, 0s);
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transform: none; }
+}
+
 /* ————— Grain de papier ————— */
 
 /*

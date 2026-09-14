@@ -45,7 +45,10 @@
   align-content: start;
   gap: 0.9rem;
   min-height: clamp(300px, 34vw, 380px);
-  transition: background 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+  transition:
+    background 0.8s var(--ease-out),
+    opacity var(--reveal-duration) var(--ease-out) var(--reveal-delay),
+    transform var(--reveal-duration) var(--ease-out) var(--reveal-delay);
 }
 
 /* Au survol, la nuit monte dans la carte : le seul endroit où le papier s'inverse. */

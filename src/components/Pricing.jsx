@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { motion } from "motion/react";
 import { plans } from "../data/content";
 import SplitText from "./ui/SplitText";
 import Reveal from "./ui/Reveal";
@@ -11,12 +10,10 @@ function Plan({ plan, i }) {
   const revealed = useRevealed(ref, 0.2);
 
   return (
-    <motion.article
+    <article
       ref={ref}
-      className={`plan ${plan.featured ? "plan--featured on-navy" : ""}`}
-      initial={{ opacity: 0, y: 54 }}
-      animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 54 }}
-      transition={{ duration: 1.05, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+      className={`plan reveal ${revealed ? "is-in" : ""} ${plan.featured ? "plan--featured on-navy" : ""}`}
+      style={{ "--reveal-y": "54px", "--reveal-delay": `${i * 0.12}s` }}
     >
       {plan.featured && <span className="plan__flag">La plus choisie</span>}
       <header className="plan__head">
@@ -31,17 +28,12 @@ function Plan({ plan, i }) {
 
       <ul className="plan__features">
         {plan.features.map((f, fi) => (
-          <motion.li
-            key={f}
-            initial={{ opacity: 0, x: -10 }}
-            animate={revealed ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
-            transition={{ duration: 0.7, delay: 0.3 + i * 0.12 + fi * 0.07, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <li key={f} style={{ transitionDelay: `${0.3 + i * 0.12 + fi * 0.07}s` }}>
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M2.5 8.4l3.6 3.6L14 4.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
             </svg>
             {f}
-          </motion.li>
+          </li>
         ))}
       </ul>
 
@@ -49,7 +41,7 @@ function Plan({ plan, i }) {
         {plan.featured ? "Demander une estimation" : "Nous écrire"}
         <span className="btn__arrow">→</span>
       </a>
-    </motion.article>
+    </article>
   );
 }
 

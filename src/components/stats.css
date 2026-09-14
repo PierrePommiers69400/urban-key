@@ -73,3 +73,23 @@
 @media (max-width: 900px) {
   .stats__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.2rem 1.4rem; }
 }
+
+/* Le mot fantôme glisse et la lueur remonte, au rythme de la section. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .stats { view-timeline: --stats block; }
+
+    .stats__ghost,
+    .stats__glow {
+      animation: linear both;
+      animation-timeline: --stats;
+      will-change: transform;
+    }
+
+    .stats__ghost { animation-name: stats-ghost; }
+    .stats__glow { animation-name: stats-glow; }
+  }
+}
+
+@keyframes stats-ghost { from { transform: translateX(-14%); } to { transform: translateX(10%); } }
+@keyframes stats-glow { from { transform: translateY(25%); } to { transform: translateY(-25%); } }

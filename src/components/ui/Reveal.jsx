@@ -1,10 +1,13 @@
 import { useRef } from "react";
-import { motion, useReducedMotion } from "motion/react";
 import useRevealed from "./useRevealed";
 
 /**
- * Révélation au défilement : le contenu monte depuis un masque.
+ * Révélation au défilement : le contenu monte en fondu.
  * `as` permet de conserver une sémantique correcte (li, figure, etc.).
+ *
+ * L'animation est une transition CSS, pas une animation JavaScript : le
+ * navigateur la joue sur la carte graphique sans repeindre le bloc à chaque
+ * image. Tout est réglé par variables (voir `.reveal` dans base.css).
  */
 export default function Reveal({
   children,
@@ -12,25 +15,24 @@ export default function Reveal({
   y = 34,
   duration = 1.05,
   className = "",
-  as = "div",
+  as: Tag = "div",
   amount = 0.3,
+  style,
   ...rest
 }) {
   const ref = useRef(null);
-  const reduced = useReducedMotion();
   const revealed = useRevealed(ref, amount);
-  const Tag = motion[as] ?? motion.div;
-
-  const from = reduced ? { opacity: 0 } : { opacity: 0, y };
-  const to = reduced ? { opacity: 1 } : { opacity: 1, y: 0 };
 
   return (
     <Tag
       ref={ref}
-      className={className}
-      initial={from}
-      animate={revealed ? to : from}
-      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={`reveal ${revealed ? "is-in" : ""} ${className}`}
+      style={{
+        "--reveal-y": `${y}px`,
+        "--reveal-delay": `${delay}s`,
+        "--reveal-duration": `${duration}s`,
+        ...style,
+      }}
       {...rest}
     >
       {children}

@@ -29,8 +29,12 @@
   border: var(--rule);
   background: var(--paper);
   box-shadow: var(--shadow-card);
-  transition: transform 0.8s var(--ease-out), border-color 0.8s var(--ease-out),
-    box-shadow 0.8s var(--ease-out), background 0.8s var(--ease-out);
+  transition:
+    opacity 1.05s var(--ease-out) var(--reveal-delay),
+    transform 0.8s var(--ease-out),
+    border-color 0.8s var(--ease-out),
+    box-shadow 0.8s var(--ease-out),
+    background 0.8s var(--ease-out);
 }
 
 .plan:hover {
@@ -123,7 +127,11 @@
   gap: 0.7rem;
 }
 
+/* Les lignes entrent une à une ; leur décalage est posé dans le JSX. */
 .plan__features li {
+  opacity: 0;
+  transform: translate3d(-10px, 0, 0);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 0.7rem;
@@ -132,6 +140,8 @@
   color: var(--fg-dim);
   line-height: 1.5;
 }
+
+.plan.is-in .plan__features li { opacity: 1; transform: none; }
 
 .plan__features svg {
   width: 15px;

@@ -128,3 +128,36 @@
   .step__body p { font-size: var(--fs-small); }
   .step__aside { margin-top: 0.6rem; padding: 0.4em 0.9em; }
 }
+
+/*
+ * La frise se remplit et chaque étape s'allume à mesure qu'on descend.
+ * Animations pilotées par le navigateur : sans prise en charge, la frise
+ * est simplement pleine et les étapes déjà allumées.
+ *   Frise : de « haut de section à 60 % de l'écran » à « bas à 70 % ».
+ *   Étape : de « haut de l'étape à 80 % de l'écran » à « haut à 35 % ».
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .process { view-timeline: --process block; }
+
+    .process__rail-fill {
+      animation: process-rail linear both;
+      animation-timeline: --process;
+      animation-range: cover 40vh cover calc(100% - 70vh);
+    }
+
+    .step,
+    .step__dot {
+      animation: linear both;
+      animation-timeline: view();
+      animation-range: cover 20vh cover 65vh;
+    }
+
+    .step { animation-name: step-in; will-change: transform, opacity; }
+    .step__dot { animation-name: step-dot; }
+  }
+}
+
+@keyframes process-rail { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes step-in { from { opacity: 0.28; transform: translateX(26px); } to { opacity: 1; transform: none; } }
+@keyframes step-dot { 0%, 40% { transform: scale(0.4); } to { transform: scale(1); } }

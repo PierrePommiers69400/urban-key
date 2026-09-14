@@ -16,12 +16,46 @@ import { useInView } from "motion/react";
  */
 const CHECKPOINTS = [0, 260, 900];
 
+/*
+ * Une seule écoute du défilement et une seule image d'animation pour toute la
+ * page. Chaque élément en attente s'y inscrit : en haut de page, ils sont une
+ * cinquantaine, et chacun réclamait jusqu'ici sa propre image à chaque cran.
+ */
+const watchers = new Set();
+let queued = 0;
+
+const flush = () => {
+  queued = 0;
+  watchers.forEach((check) => check());
+};
+
+const schedule = () => {
+  if (!queued) queued = requestAnimationFrame(flush);
+};
+
+function watch(check) {
+  if (watchers.size === 0) {
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+  }
+  watchers.add(check);
+  return () => {
+    watchers.delete(check);
+    if (watchers.size === 0) {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      cancelAnimationFrame(queued);
+      queued = 0;
+    }
+  };
+}
+
 export default function useRevealed(ref, amount = 0.3, reach = 0.95) {
   const inView = useInView(ref, { once: true, amount });
   const [seen, setSeen] = useState(false);
 
   useEffect(() => {
-    if (seen) return undefined;
+    if (seen || inView) return undefined;
 
     const check = () => {
       const el = ref.current;
@@ -30,29 +64,14 @@ export default function useRevealed(ref, amount = 0.3, reach = 0.95) {
       if (rect.top < window.innerHeight * reach && rect.bottom > 0) setSeen(true);
     };
 
-    // Une lecture de géométrie par image au plus : l'événement de défilement se
-    // déclenche bien plus souvent que l'écran ne se rafraîchit, et chaque
-    // composant en attente y allait de son propre calcul de position.
-    let queued = 0;
-    const onScroll = () => {
-      if (queued) return;
-      queued = requestAnimationFrame(() => {
-        queued = 0;
-        check();
-      });
-    };
-
     const timers = CHECKPOINTS.map((delay) => setTimeout(check, delay));
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    const unwatch = watch(check);
 
     return () => {
       timers.forEach(clearTimeout);
-      if (queued) cancelAnimationFrame(queued);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      unwatch();
     };
-  }, [ref, reach, seen]);
+  }, [ref, reach, seen, inView]);
 
   return inView || seen;
 }

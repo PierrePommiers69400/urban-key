@@ -1,5 +1,3 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { brand, interiors } from "../data/content";
 import SplitText from "./ui/SplitText";
 import Reveal from "./ui/Reveal";
@@ -26,18 +24,8 @@ const principles = [
 ];
 
 export default function Manifesto() {
-  const ref = useRef(null);
-  const reduced = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const artY = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
-  // La photo glisse dans son arche à contre-sens du cadre : une fenêtre.
-  const photoY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
-  const insetY = useTransform(scrollYProgress, [0, 1], ["40%", "-40%"]);
-  /* Le sceau monte doucement : le faire pivoter coucherait la serrure. */
-  const badgeY = useTransform(scrollYProgress, [0, 1], ["26px", "-26px"]);
-
   return (
-    <section className="section manifesto" id="manifeste" ref={ref}>
+    <section className="section manifesto" id="manifeste">
       <div className="shell manifesto__grid">
         <div className="manifesto__head">
           <Reveal>
@@ -80,15 +68,14 @@ export default function Manifesto() {
         </div>
 
         <div className="manifesto__aside">
-          <motion.figure className="manifesto__frame" style={reduced ? undefined : { y: artY }}>
+          <figure className="manifesto__frame">
             <div className="manifesto__arch">
-              <motion.img
+              <img
                 className="manifesto__photo"
                 src={photoSrc(cover)}
                 srcSet={photoSrcSet(cover)}
                 sizes="(max-width: 1024px) 90vw, 40vw"
                 alt={cover.alt}
-                style={reduced ? undefined : { y: photoY }}
                 loading="lazy"
                 decoding="async"
               />
@@ -97,9 +84,9 @@ export default function Manifesto() {
               <span>Un intérieur Urban Key</span>
               <span className="manifesto__frame-year">MMXXVI</span>
             </figcaption>
-          </motion.figure>
+          </figure>
 
-          <motion.figure className="manifesto__inset" style={reduced ? undefined : { y: insetY }}>
+          <figure className="manifesto__inset">
             <img
               src={photoSrc(inset)}
               srcSet={photoSrcSet(inset)}
@@ -108,11 +95,11 @@ export default function Manifesto() {
               loading="lazy"
               decoding="async"
             />
-          </motion.figure>
+          </figure>
 
-          <motion.div className="manifesto__badge" style={reduced ? undefined : { y: badgeY }}>
+          <div className="manifesto__badge">
             <RotaryBadge size={160} text="URBAN KEY · CONCIERGERIE · FRANCE · " />
-          </motion.div>
+          </div>
 
           <Reveal delay={0.25} className="manifesto__quote">
             <p>
