@@ -17,6 +17,10 @@ import "./gallery.css";
 
 const PIN_QUERY = "(min-width: 900px)";
 
+// Glissement du rail lié au défilement par le navigateur lui-même : calé sur
+// la page image par image. Sans ViewTimeline, Motion le calcule en JavaScript.
+const NATIVE_SCROLL = typeof window !== "undefined" && "ViewTimeline" in window;
+
 /**
  * Galerie épinglée seulement sur grand écran, et si le visiteur accepte le
  * mouvement : au doigt, un défilement horizontal natif est plus honnête
@@ -69,6 +73,8 @@ export default function Gallery() {
   const sectionRef = useRef(null);
   const railRef = useRef(null);
   const trackRef = useRef(null);
+  const ghostRef = useRef(null);
+  const barRef = useRef(null);
   const pinned = usePinned();
   const [distance, setDistance] = useState(0);
   const [active, setActive] = useState(0);
@@ -120,6 +126,29 @@ export default function Gallery() {
     window.scrollTo({ top: top + shift, behavior: "instant" });
   };
 
+  useEffect(() => {
+    if (!pinned || !NATIVE_SCROLL || !distance) return undefined;
+    const timing = {
+      timeline: new ViewTimeline({ subject: sectionRef.current, axis: "block" }),
+      rangeStart: "contain 0%",
+      rangeEnd: "contain 100%",
+      fill: "both",
+      easing: "linear",
+    };
+    const slide = (el, keyframes) => el?.animate(keyframes, timing);
+    const animations = [
+      slide(railRef.current, { transform: ["translateX(0px)", `translateX(${-distance}px)`] }),
+      slide(ghostRef.current, { transform: ["translateX(0px)", `translateX(${-distance * 0.3}px)`] }),
+      slide(barRef.current, { transform: ["scaleX(0)", "scaleX(1)"] }),
+      ...[...trackRef.current.querySelectorAll(".shot__img")].map((img) =>
+        slide(img, { transform: ["translateX(5%)", "translateX(-5%)"] }),
+      ),
+    ];
+    return () => animations.forEach((a) => a?.cancel());
+  }, [pinned, distance]);
+
+  const jsSlide = pinned && !NATIVE_SCROLL;
+
   useMotionValueEvent(progress, "change", (v) => {
     const last = interiors.length - 1;
     setActive(Math.min(last, Math.max(0, Math.round(v * last))));
@@ -135,8 +164,9 @@ export default function Gallery() {
     >
       <div className="gallery__pin">
         <motion.span
+          ref={ghostRef}
           className="gallery__ghost"
-          style={pinned ? { x: ghostX } : undefined}
+          style={jsSlide ? { x: ghostX } : undefined}
           aria-hidden="true"
         >
           Intérieurs
@@ -145,7 +175,7 @@ export default function Gallery() {
         <motion.div
           className="gallery__rail"
           ref={railRef}
-          style={pinned ? { x: railX } : undefined}
+          style={jsSlide ? { x: railX } : undefined}
           onFocus={onRailFocus}
         >
           <header className="gallery__intro">
@@ -180,7 +210,7 @@ export default function Gallery() {
                 key={photo.id}
                 photo={photo}
                 i={i}
-                drift={pinned ? drift : undefined}
+                drift={jsSlide ? drift : undefined}
                 eager={near}
                 onOpen={setOpen}
               />
@@ -207,7 +237,7 @@ export default function Gallery() {
             {pad(active + 1)} <span>/ {pad(interiors.length)}</span>
           </span>
           <div className="gallery__bar">
-            <motion.span style={{ scaleX: progress }} />
+            <motion.span ref={barRef} style={pinned && NATIVE_SCROLL ? undefined : { scaleX: progress }} />
           </div>
           <span className="gallery__room">{interiors[active].room}</span>
         </div>

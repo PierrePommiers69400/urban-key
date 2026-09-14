@@ -25,9 +25,11 @@ export default function Marquee({ speed = 34 }) {
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const velocity = useVelocity(scrollY);
-  const smooth = useSpring(velocity, { damping: 48, stiffness: 380 });
-  const factor = useTransform(smooth, [-1400, 0, 1400], [-5, 0, 5], { clamp: false });
-  const skew = useTransform(smooth, [-1400, 0, 1400], [-4, 0, 4], { clamp: true });
+  // Ressort souple : à la molette, la vitesse arrive par à-coups, cran après
+  // cran ; un ressort raide les recopiait en saccades d'accélération.
+  const smooth = useSpring(velocity, { damping: 40, stiffness: 120, mass: 0.8 });
+  const factor = useTransform(smooth, [-1400, 0, 1400], [-2.4, 0, 2.4], { clamp: false });
+  const skew = useTransform(smooth, [-1400, 0, 1400], [-2.5, 0, 2.5], { clamp: true });
   const direction = useRef(1);
   const x = useTransform(baseX, (v) => `${wrap(-25, 0, v)}%`);
 
@@ -42,8 +44,10 @@ export default function Marquee({ speed = 34 }) {
       last = now;
       let move = ((direction.current * speed * delta) / 1000 / window.innerWidth) * 100;
       const f = factor.get();
-      if (f < 0) direction.current = -1;
-      else if (f > 0) direction.current = 1;
+      // Un seuil, et non le simple signe : en retombant, le ressort passe un
+      // instant sous zéro, et le bandeau repartait à l'envers après chaque cran.
+      if (f < -0.35) direction.current = -1;
+      else if (f > 0.35) direction.current = 1;
       move += move * Math.abs(f);
       baseX.set(baseX.get() + move * -1);
       frame = requestAnimationFrame(tick);

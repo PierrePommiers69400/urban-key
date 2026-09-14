@@ -156,3 +156,22 @@
   .hero { padding-block: calc(var(--nav-h) + 2.2rem) 2.6rem; }
   .hero__highlights { gap: 1.1rem 1.8rem; margin-top: 0.4rem; padding-top: 1.1rem; }
 }
+
+/* Le texte monte et s'efface pendant que le premier écran s'en va
+   (de « haut du héros en haut de l'écran » à « bas du héros en haut »). */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .hero { view-timeline: --hero block; }
+
+    .hero__copy {
+      animation: hero-copy-rise linear both, hero-copy-fade linear both;
+      animation-timeline: --hero, --hero;
+      animation-range:
+        exit-crossing 0% exit-crossing 100%,
+        exit-crossing 0% exit-crossing 85%;
+    }
+  }
+}
+
+@keyframes hero-copy-rise { to { transform: translateY(-12%); } }
+@keyframes hero-copy-fade { to { opacity: 0; } }

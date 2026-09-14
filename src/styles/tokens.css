@@ -89,8 +89,8 @@
   --grad-night: radial-gradient(120% 90% at 50% -10%, #17305c 0%, #0b1b3a 44%, #060f24 100%);
 
   /* — Typographie — */
-  --font-display: "Newsreader", "Iowan Old Style", "Georgia", serif;
-  --font-body: "Instrument Sans", "Helvetica Neue", "Segoe UI", sans-serif;
+  --font-display: "Newsreader", "Newsreader Fallback", "Iowan Old Style", "Georgia", serif;
+  --font-body: "Instrument Sans", "Instrument Sans Fallback", "Helvetica Neue", "Segoe UI", sans-serif;
 
   --fs-display: clamp(3.2rem, 10.5vw, 11rem);
   --fs-h1: clamp(2.4rem, 4.6vw, 4.6rem);

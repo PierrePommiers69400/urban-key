@@ -117,26 +117,26 @@
   max-width: 40ch;
 }
 
+/*
+ * La liste occupe toujours sa place et n'apparaît qu'au survol. En se
+ * dépliant, elle agrandissait la carte — donc toute la rangée — et la page
+ * sautait de 60 à 90 px chaque fois qu'une carte passait sous la souris.
+ */
 .service__details {
   list-style: none;
-  margin: 0;
+  margin: 0.5rem 0 0;
   padding: 0;
   display: grid;
   gap: 0.45rem;
-  max-height: 0;
   opacity: 0;
   transform: translateY(8px);
-  overflow: hidden;
-  transition: max-height 0.9s var(--ease-out), opacity 0.7s var(--ease-out), transform 0.9s var(--ease-out),
-    margin-top 0.9s var(--ease-out);
+  transition: opacity 0.7s var(--ease-out), transform 0.9s var(--ease-out);
 }
 
 .service:hover .service__details,
 .service:focus-within .service__details {
-  max-height: 200px;
   opacity: 1;
   transform: translateY(0);
-  margin-top: 0.5rem;
 }
 
 .service__details li {
@@ -273,7 +273,6 @@
 
   .service__details,
   .service:hover .service__details {
-    max-height: none;
     opacity: 1;
     transform: none;
     margin-top: 0;

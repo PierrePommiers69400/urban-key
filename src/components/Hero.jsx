@@ -12,6 +12,12 @@ import Magnetic from "./ui/Magnetic";
 import KeyBackdrop from "./ui/KeyBackdrop";
 import "./hero.css";
 
+// Là où le navigateur sait lier une animation au défilement, c'est lui qui
+// fait monter et s'effacer le texte (hero.css) : il reste calé au pixel près
+// sur la page. Ailleurs, Motion prend le relais, avec une image de retard.
+const NATIVE_SCROLL =
+  typeof CSS !== "undefined" && CSS.supports("animation-timeline: view()");
+
 // Une seule source de vérité : les trois premiers engagements de content.js.
 const highlights = stats.slice(0, 3).map((s) => ({
   value: `${s.value.toLocaleString("fr-FR")}${s.suffix}`,
@@ -50,7 +56,7 @@ export default function Hero() {
       <div className="shell hero__layout">
         <motion.div
           className="hero__copy"
-          style={reduced ? undefined : { y: copyY, opacity: fade }}
+          style={reduced || NATIVE_SCROLL ? undefined : { y: copyY, opacity: fade }}
         >
           {/* Le titre et son surtitre ne s'animent pas : c'est la première
               chose qu'on doit lire, elle est là dès la première image. */}

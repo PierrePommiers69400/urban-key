@@ -132,6 +132,11 @@ img, svg { display: block; max-width: 100%; }
   border: 0;
 }
 
+/* ————— Pas de survol pendant le défilement (voir App.jsx) ————— */
+
+.is-scrolling main,
+.is-scrolling .footer { pointer-events: none; }
+
 /* ————— Révélations au défilement ————— */
 
 /*

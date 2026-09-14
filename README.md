@@ -2,7 +2,7 @@
 
 Site statique (React + Vite) pour **Urban Key**, conciergerie et gestion locative
 haut de gamme. Une seule page, six sections ancrées, entièrement autonome :
-aucune image ni script externe, hormis les polices Google.
+aucune ressource externe — polices comprises.
 
 ## Démarrer
 
@@ -52,6 +52,10 @@ dépôt et chez le registraire (enregistrements DNS indiqués par GitHub).
 - **Typographie** — *Newsreader* (serif éditoriale à contraste modéré, titres) et
   *Instrument Sans* (grotesque, textes). Le choix est dicté par la lisibilité :
   une didone perd ses déliés à l'écran, surtout aux corps intermédiaires.
+  Les deux polices sont hébergées avec le site (`public/fonts/`, déclarées dans
+  `src/styles/fonts.css`) et préchargées : aucun appel à Google, ni délai, ni
+  transfert d'adresse IP. `font-display: optional` garantit qu'elles ne
+  remplacent jamais la police de secours en cours de lecture.
 - **Matière** — grain de papier, filets fins, tracés SVG, halos très légers.
 
 ### Une couche sémantique, deux thèmes
@@ -223,6 +227,24 @@ revienne pas :
   (`useRevealed`), une seule image d'animation par cran.
 - **Calque dédié** (`will-change: transform`) pour tout élément déplacé en
   JavaScript à chaque image (photos de la galerie, texte du premier écran).
+
+### Règles contre les sauts au défilement
+
+- **Rien de lié au défilement en JavaScript quand le navigateur sait le
+  faire.** Le texte du premier écran (CSS `animation-timeline`) et le rail de
+  la galerie (`ViewTimeline` en Web Animations) sont calés image par image
+  sur la page ; Motion ne prend le relais que sur les navigateurs qui ne les
+  gèrent pas, avec une image de retard.
+- **Un survol ne change jamais la taille d'un bloc.** Les détails des cartes
+  de services occupent leur place en permanence : en se dépliant, ils
+  agrandissaient la rangée et faisaient sauter la page de 60 à 90 px.
+- **Pas de survol pendant le défilement.** La classe `is-scrolling` (posée
+  sur `<html>` par `App.jsx`, retirée 160 ms après le dernier cran) coupe les
+  événements de pointeur : les cartes ne montent plus au passage de la souris.
+- **Polices sans bascule** (voir *Typographie*) : l'arrivée tardive d'une
+  police rééchelonnait tous les retours à la ligne, jusqu'à 230 px de décalage.
+- **Bandeau** : ressort de vitesse souple et seuil de changement de sens —
+  sans quoi il repartait à l'envers après chaque cran de molette.
 
 `prefers-reduced-motion` est respecté partout : les révélations deviennent de
 simples fondus et la galerie cesse de s'épingler.
