@@ -20,8 +20,8 @@ Aucun serveur, aucune variable d'environnement.
 
 ## Mise en ligne
 
-Le site est hébergé gratuitement par **GitHub Pages** :
-<https://pierrepommiers69400.github.io/urban-key/>
+Le site est hébergé gratuitement par **GitHub Pages**, sous son propre nom de
+domaine : <https://urbankey.fr/>
 
 Pour publier une modification :
 
@@ -33,15 +33,15 @@ La commande reconstruit le site et envoie `dist/` sur la branche `gh-pages`
 (`scripts/deploy.mjs`), que GitHub sert en ligne une minute plus tard. Le code
 source, lui, vit sur `main` : penser à y pousser aussi ses modifications.
 
-Servi sous `/urban-key/`, il déclare cette base dans `vite.config.js` : en local,
-`npm run dev` ouvre donc <http://localhost:5173/urban-key/>. Les chemins vers
-`public/` passent par `import.meta.env.BASE_URL`, jamais par un `/` en dur.
+Le domaine est déclaré dans `public/CNAME` (repris à chaque publication) et
+dans les réglages Pages du dépôt. Chez IONOS, le registraire, `urbankey.fr`
+pointe vers les quatre adresses de GitHub Pages (enregistrements A
+`185.199.108.153` à `185.199.111.153`) et `www` est un CNAME vers
+`pierrepommiers69400.github.io`. Les enregistrements MX d'IONOS restent en
+place pour la messagerie.
 
-**Brancher un nom de domaine** (urbankey.fr, par exemple) : passer `BASE` à
-`"/"` dans `vite.config.js`, remplacer l'adresse du site dans `index.html`,
-`public/robots.txt` et `public/sitemap.xml`, ajouter un fichier `public/CNAME`
-contenant le domaine, puis déclarer ce domaine dans les réglages Pages du
-dépôt et chez le registraire (enregistrements DNS indiqués par GitHub).
+Les chemins vers `public/` passent par `import.meta.env.BASE_URL`, jamais par
+un `/` en dur : le site resterait ainsi déplaçable sous un sous-chemin.
 
 ## Direction artistique
 

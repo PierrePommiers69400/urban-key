@@ -32,7 +32,7 @@ try {
   git(["add", "-A"], "dist");
   git(["-c", `user.name=${name}`, "-c", `user.email=${email}`, "commit", "-q", "-m", "Publication du site"], "dist");
   execFileSync("git", [...auth, "push", "-q", "-f", remote, "gh-pages"], { cwd: "dist", stdio: "inherit" });
-  console.log("Site publié : https://pierrepommiers69400.github.io/urban-key/ (en ligne d'ici une minute)");
+  console.log("Site publié : https://urbankey.fr/ (en ligne d'ici une minute)");
 } finally {
   rmSync("dist/.git", { recursive: true, force: true });
 }
